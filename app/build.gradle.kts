@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "es.ua.eps.filmoteca"
-        minSdk = 33
+        minSdk = 21
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -32,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    viewBinding{
+        enable = true
     }
 }
 
