@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Filmoteca</string>
+    <string name="functionality">Functionality not implemented</string>
+    <string name="developed_by">Created by Angel Terol</string>
+    <string name="to_webpage">Go to webpage</string>
+    <string name="support">Obtain support</string>
+    <string name="back">Return</string>
+</resources>

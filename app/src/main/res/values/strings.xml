@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Filmoteca</string>
-    <string name="functionality">Functionality not implemented</string>
+    <string name="functionality">Funcionalidad no implementada</string>
+    <string name="developed_by">Creada por Angel Terol</string>
+    <string name="to_webpage">Ir al sitio web</string>
+    <string name="support">Obtener soporte</string>
+    <string name="back">Volver</string>
 </resources>
