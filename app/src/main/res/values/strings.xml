@@ -15,6 +15,13 @@
     <string name="film_editing">Editando película</string>
     <string name="film_save">Guardar</string>
     <string name="film_cancel">Cancelar</string>
+    <string name="film_a_name">Harry Potter: La Piedra Filosofal</string>
+    <string name="film_b_name">Misión Imposible 76</string>
+    <string name="film_related_name">La Bella y la Bestia</string>
+    <string name="film_edit_result">Editado</string>
+    <string name="film_edit_result_ok">Editado correctamente</string>
+    <string name="film_edit_result_cancelled">Edición cancelada</string>
+
     <string name="email_to" translatable="false">jtm37@alu.ua.es</string>
     <string name="webPage" translatable="false">https://egenad.github.io/</string>
 </resources>

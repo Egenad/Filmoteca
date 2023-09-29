@@ -16,11 +16,15 @@ class FilmListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.filmA.setOnClickListener {
-            startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java))
+            startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java)
+                .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_a_name))
+            )
         }
 
         binding.filmB.setOnClickListener {
-            startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java))
+            startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java)
+                .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_b_name))
+            )
         }
 
         binding.about.setOnClickListener {

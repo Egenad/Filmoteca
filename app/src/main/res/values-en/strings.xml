@@ -16,4 +16,12 @@
     <string name="film_editing">Editing film</string>
     <string name="film_save">Save</string>
     <string name="film_cancel">Cancel</string>
+    <string name="film_a_name">Harry Potter: Philosopher´s Stone</string>
+    <string name="film_b_name">Impossible Mission 76</string>
+    <string name="film_related_name">Beauty and the Beast</string>
+    <string name="film_edit_result">Edited</string>
+    <string name="film_edit_result_ok">Edited correctly</string>
+    <string name="film_edit_result_cancelled">Canceled edition</string>
+
+
 </resources>
