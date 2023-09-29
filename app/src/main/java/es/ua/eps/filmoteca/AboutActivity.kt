@@ -1,5 +1,7 @@
 package es.ua.eps.filmoteca
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,15 +18,27 @@ class AboutActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.webpage.setOnClickListener{
-            Toast.makeText(this, R.string.functionality, Toast.LENGTH_LONG).show()
+            val webPageIntent = Intent(Intent.ACTION_VIEW,
+                Uri.parse(resources.getString(R.string.webPage)))
+            if (checkResolveNull(webPageIntent)) {
+                startActivity(webPageIntent)
+            }
         }
 
         binding.support.setOnClickListener{
-            Toast.makeText(this, R.string.functionality, Toast.LENGTH_LONG).show()
+            val emailIntent = Intent(Intent.ACTION_SENDTO,
+                Uri.parse("mailto:" + resources.getString(R.string.email_to)))
+            if (checkResolveNull(emailIntent)) {
+                startActivity(emailIntent)
+            }
         }
 
         binding.back.setOnClickListener{
-            Toast.makeText(this, R.string.functionality, Toast.LENGTH_LONG).show()
+            finish()
         }
+    }
+
+    private fun checkResolveNull(customIntent : Intent) : Boolean {
+        return customIntent.resolveActivity(packageManager) != null
     }
 }

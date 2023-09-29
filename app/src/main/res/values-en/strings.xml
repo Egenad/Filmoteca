@@ -6,4 +6,14 @@
     <string name="to_webpage">Go to webpage</string>
     <string name="support">Obtain support</string>
     <string name="back">Return</string>
+    <string name="film_a">Watch film A</string>
+    <string name="film_b">Watch film B</string>
+    <string name="about">About</string>
+    <string name="film_data">Film information</string>
+    <string name="film_related">Watch related film</string>
+    <string name="film_edit">Edit film</string>
+    <string name="film_return">Return to principal</string>
+    <string name="film_editing">Editing film</string>
+    <string name="film_save">Save</string>
+    <string name="film_cancel">Cancel</string>
 </resources>

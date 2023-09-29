@@ -5,4 +5,16 @@
     <string name="to_webpage">Ir al sitio web</string>
     <string name="support">Obtener soporte</string>
     <string name="back">Volver</string>
+    <string name="film_a">Ver película A</string>
+    <string name="film_b">Ver película B</string>
+    <string name="about">Acerca de</string>
+    <string name="film_data">Datos de la película</string>
+    <string name="film_related">Ver película relacionada</string>
+    <string name="film_edit">Editar película</string>
+    <string name="film_return">Volver a la principal</string>
+    <string name="film_editing">Editando película</string>
+    <string name="film_save">Guardar</string>
+    <string name="film_cancel">Cancelar</string>
+    <string name="email_to" translatable="false">jtm37@alu.ua.es</string>
+    <string name="webPage" translatable="false">https://egenad.github.io/</string>
 </resources>
