@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
 const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
-
 class FilmDataActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityFilmDataBinding
