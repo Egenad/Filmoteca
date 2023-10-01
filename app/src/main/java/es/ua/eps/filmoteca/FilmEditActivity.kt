@@ -11,7 +11,6 @@ class FilmEditActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFilmEditBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_film_edit)
 
         binding = ActivityFilmEditBinding.inflate(layoutInflater)
         setContentView(binding.root)

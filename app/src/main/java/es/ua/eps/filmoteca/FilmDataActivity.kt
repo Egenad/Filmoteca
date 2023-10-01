@@ -23,12 +23,11 @@ class FilmDataActivity : AppCompatActivity() {
         }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_film_data)
 
         binding = ActivityFilmDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.filmRelated.setOnClickListener {
+        binding.filmImdb.setOnClickListener {
             startActivity(Intent(this@FilmDataActivity, FilmDataActivity::class.java)
                 .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_related_name))
             )

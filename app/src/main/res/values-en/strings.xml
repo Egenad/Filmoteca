@@ -9,19 +9,20 @@
     <string name="film_a">Watch film A</string>
     <string name="film_b">Watch film B</string>
     <string name="about">About</string>
-    <string name="film_data">Film information</string>
-    <string name="film_related">Watch related film</string>
+    <string name="film_data"><b>Film information</b></string>
+    <string name="film_imdb"><b>WATCH IN IMDB</b></string>
     <string name="film_edit">Edit film</string>
     <string name="film_return">Return to principal</string>
     <string name="film_editing">Editing film</string>
     <string name="film_save">Save</string>
     <string name="film_cancel">Cancel</string>
     <string name="film_a_name">Harry Potter: Philosopher´s Stone</string>
-    <string name="film_b_name">Impossible Mission 76</string>
+    <string name="film_b_name">Indiana Jones: Raiders of the Lost Ark</string>
     <string name="film_related_name">Beauty and the Beast</string>
     <string name="film_edit_result">Edited</string>
     <string name="film_edit_result_ok">Edited correctly</string>
     <string name="film_edit_result_cancelled">Canceled edition</string>
-
+    <string name="film_year_header"><i>Year:</i></string>
+    <string name="extended_version">Extended version</string>
 
 </resources>

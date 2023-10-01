@@ -8,20 +8,26 @@
     <string name="film_a">Ver película A</string>
     <string name="film_b">Ver película B</string>
     <string name="about">Acerca de</string>
-    <string name="film_data">Datos de la película</string>
-    <string name="film_related">Ver película relacionada</string>
-    <string name="film_edit">Editar película</string>
-    <string name="film_return">Volver a la principal</string>
+    <string name="film_data"><h1><b>Datos de la película</b></h1></string>
+    <string name="film_imdb"><b>VER EN IMDB</b></string>
+    <string name="film_edit"><b>EDITAR PELICULA</b></string>
+    <string name="film_return"><b>VOLVER AL PRINCIPAL</b></string>
     <string name="film_editing">Editando película</string>
     <string name="film_save">Guardar</string>
     <string name="film_cancel">Cancelar</string>
     <string name="film_a_name">Harry Potter: La Piedra Filosofal</string>
-    <string name="film_b_name">Misión Imposible 76</string>
+    <string name="film_b_name">Indiana Jones: En busca del Arca Perdida</string>
     <string name="film_related_name">La Bella y la Bestia</string>
     <string name="film_edit_result">Editado</string>
     <string name="film_edit_result_ok">Editado correctamente</string>
     <string name="film_edit_result_cancelled">Edición cancelada</string>
+    <string name="film_year_header"><i>Año:</i></string>
+    <string name="extended_version">Versión extendida</string>
 
+    <string name="film_year_value" translatable="false">1985</string>
+    <string name="film_type_and_genere" translatable="false">Bluray, Sci-Fi</string>
+    <string name="film_director_value" translatable="false">Robert Zemeckis</string>
+    <string name="film_director_header" translatable="false"><i>Director:</i></string>
     <string name="email_to" translatable="false">jtm37@alu.ua.es</string>
     <string name="webPage" translatable="false">https://egenad.github.io/</string>
 </resources>

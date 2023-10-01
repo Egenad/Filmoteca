@@ -10,7 +10,6 @@ class FilmListActivity : AppCompatActivity() {
     private lateinit var binding : ActivityFilmListBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_film_list)
 
         binding = ActivityFilmListBinding.inflate(layoutInflater)
         setContentView(binding.root)
