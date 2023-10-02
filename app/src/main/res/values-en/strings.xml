@@ -14,8 +14,6 @@
     <string name="film_edit">Edit film</string>
     <string name="film_return">Return to principal</string>
     <string name="film_editing">Editing film</string>
-    <string name="film_save">Save</string>
-    <string name="film_cancel">Cancel</string>
     <string name="film_a_name">Harry Potter: Philosopher´s Stone</string>
     <string name="film_b_name">Indiana Jones: Raiders of the Lost Ark</string>
     <string name="film_related_name">Beauty and the Beast</string>
@@ -24,5 +22,21 @@
     <string name="film_edit_result_cancelled">Canceled edition</string>
     <string name="film_year_header"><i>Year:</i></string>
     <string name="extended_version">Extended version</string>
+
+    <!-- FILM DATA -->
+    <string name="film_image_cd">Image of the film</string>
+
+
+    <!-- FILM EDIT -->
+    <string name="film_photo">TAKE SCREENSHOT</string>
+    <string name="film_select_image">SELECT IMAGE</string>
+    <string name="film_save">SAVE</string>
+    <string name="film_cancel">Cancel</string>
+    <string name="film_edit_title">Title of the film</string>
+    <string name="film_edit_director">Director´s name</string>
+    <string name="film_edit_year">Year</string>
+    <string name="film_edit_imdb">Link to IMDB</string>
+    <string name="film_edit_comments">Comments</string>
+    <string name="film_edit_genere_2">Action</string>
 
 </resources>

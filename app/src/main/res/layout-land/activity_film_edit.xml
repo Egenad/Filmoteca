@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:paddingLeft="16dp"
+      android:paddingTop="16dp"
+      android:paddingRight="16dp"
+      android:paddingBottom="16dp"
+      tools:context=".FilmEditActivity">
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/back_to_future" />
+
+        <Button
+            android:id="@+id/film_photo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/film_photo"
+            android:layout_weight="2"
+            style="@style/Widget.AppCompat.Button.Small"/>
+        <Button
+            android:id="@+id/film_image_select"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/film_select_image"
+            android:layout_weight="2"
+            style="@style/Widget.AppCompat.Button.Small"/>
+
+      </LinearLayout>
+      <EditText android:layout_width="match_parent"
+          android:autofillHints="name"
+          android:inputType="text"
+          android:minHeight="48dp"
+          android:layout_height="wrap_content"
+          android:hint="@string/film_edit_title"
+          android:layout_marginTop="20dp"/>
+      <EditText android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="text"
+          android:minHeight="48dp"
+          android:autofillHints="name"
+          android:hint="@string/film_edit_director" />
+      <EditText android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:minHeight="48dp"
+          android:inputType="text"
+          android:importantForAutofill="no"
+          android:hint="@string/film_edit_year" />
+      <EditText android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:minHeight="48dp"
+          android:inputType="text"
+          android:importantForAutofill="no"
+          android:hint="@string/film_edit_imdb" />
+      <Spinner
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:minHeight="48dp"
+          android:prompt="@string/film_edit_genere_1"
+          android:entries="@array/genere_options"/>
+
+      <Spinner
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:minHeight="48dp"
+          android:layout_marginTop="20dp"
+          android:prompt="@string/film_edit_format_1"
+          android:entries="@array/format_options"/>
+
+      <EditText android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:minHeight="48dp"
+          android:inputType="text"
+          android:importantForAutofill="no"
+          android:hint="@string/film_edit_comments" />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="20dp"
+          android:layout_gravity="center|bottom"
+          android:orientation="horizontal">
+        <Button
+            android:id="@+id/film_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/film_cancel"
+            android:layout_weight="2"
+            style="@style/Widget.AppCompat.Button.Small"/>
+        <Button
+            android:id="@+id/film_save"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/film_save"
+            android:layout_weight="2"
+            style="@style/Widget.AppCompat.Button.Small"/>
+
+      </LinearLayout>
+    </LinearLayout>
+</ScrollView>

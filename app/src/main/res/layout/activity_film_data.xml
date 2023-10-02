@@ -106,6 +106,7 @@
         android:text="@string/film_edit"
         style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@+id/film_return"
         android:layout_alignBottom="@+id/film_return"
         android:layout_alignParentEnd="true"

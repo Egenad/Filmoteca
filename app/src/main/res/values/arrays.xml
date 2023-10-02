@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="genere_options">
+        <item>@string/film_edit_genere_1</item>
+        <item>@string/film_edit_genere_2</item>
+        <item>@string/film_edit_genere_3</item>
+    </string-array>
+
+    <string-array name="format_options">
+        <item>@string/film_edit_format_1</item>
+        <item>@string/film_edit_format_2</item>
+        <item>@string/film_edit_format_3</item>
+    </string-array>
+</resources>

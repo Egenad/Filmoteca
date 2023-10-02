@@ -1,52 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
     tools:context=".FilmEditActivity">
 
-  <TextView
-      android:id="@+id/film_editing"
-      android:layout_width="wrap_content"
+  <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="20dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginEnd="258dp"
-      android:text="@string/film_editing"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.136"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      android:orientation="horizontal">
 
-  <Button
-      android:id="@+id/film_save"
-      android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/back_to_future" />
+
+    <Button
+        android:id="@+id/film_photo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/film_photo"
+        android:layout_weight="2"
+        style="@style/Widget.AppCompat.Button.Small"/>
+    <Button
+        android:id="@+id/film_image_select"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/film_select_image"
+        android:layout_weight="2"
+        style="@style/Widget.AppCompat.Button.Small"/>
+
+  </LinearLayout>
+  <EditText android:layout_width="match_parent"
+      android:autofillHints="name"
+      android:inputType="text"
+      android:minHeight="48dp"
       android:layout_height="wrap_content"
-      android:layout_marginStart="30dp"
-      android:layout_marginTop="200dp"
-      android:layout_marginEnd="20dp"
-      android:layout_marginBottom="20dp"
-      android:text="@string/film_save"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.481"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.924" />
-
-  <Button
-      android:id="@+id/film_cancel"
-      android:layout_width="wrap_content"
+      android:hint="@string/film_edit_title"
+      android:layout_marginTop="20dp"/>
+  <EditText android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="10dp"
-      android:layout_marginEnd="10dp"
-      android:text="@string/film_cancel"
-      app:layout_constraintBottom_toBottomOf="@+id/film_save"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.163"
-      app:layout_constraintStart_toEndOf="@+id/film_save"
-      app:layout_constraintTop_toTopOf="@+id/film_save" />
+      android:inputType="text"
+      android:minHeight="48dp"
+      android:autofillHints="name"
+      android:hint="@string/film_edit_director" />
+  <EditText android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp"
+      android:inputType="text"
+      android:importantForAutofill="no"
+      android:hint="@string/film_edit_year" />
+  <EditText android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp"
+      android:inputType="text"
+      android:importantForAutofill="no"
+      android:hint="@string/film_edit_imdb" />
+  <Spinner
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:minHeight="48dp"
+      android:prompt="@string/film_edit_genere_1"
+      android:entries="@array/genere_options"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  <Spinner
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:minHeight="48dp"
+      android:layout_marginTop="20dp"
+      android:prompt="@string/film_edit_format_1"
+      android:entries="@array/format_options"/>
+
+  <EditText android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:minHeight="48dp"
+      android:inputType="text"
+      android:importantForAutofill="no"
+      android:hint="@string/film_edit_comments" />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:layout_gravity="center|bottom"
+      android:orientation="horizontal">
+    <Button
+        android:id="@+id/film_cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/film_cancel"
+        android:layout_weight="2"
+        style="@style/Widget.AppCompat.Button.Small"/>
+    <Button
+        android:id="@+id/film_save"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/film_save"
+        android:layout_weight="2"
+        style="@style/Widget.AppCompat.Button.Small"/>
+
+  </LinearLayout>
+</LinearLayout>
