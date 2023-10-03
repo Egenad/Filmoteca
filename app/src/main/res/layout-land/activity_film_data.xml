@@ -12,7 +12,7 @@
         android:paddingTop="16dp"
         android:paddingRight="16dp"
         android:paddingBottom="16dp"
-        tools:context=".FilmDataActivity">
+        tools:context=".activity.FilmDataActivity">
     
         <ImageView
             android:id="@+id/imageView"

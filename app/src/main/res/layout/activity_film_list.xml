@@ -4,9 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FilmListActivity">
+    tools:context=".activity.FilmListActivity">
 
-    <Button
+    <ListView android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+
+    <!-- <Button
         android:id="@+id/film_a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,6 +42,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/film_a" />
+        app:layout_constraintTop_toBottomOf="@+id/film_a" /> -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

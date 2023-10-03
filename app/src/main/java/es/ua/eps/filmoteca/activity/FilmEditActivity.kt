@@ -1,7 +1,6 @@
-package es.ua.eps.filmoteca
+package es.ua.eps.filmoteca.activity
 
 import android.app.Activity
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding

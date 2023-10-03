@@ -1,4 +1,4 @@
-package es.ua.eps.filmoteca
+package es.ua.eps.filmoteca.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
 const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"

@@ -1,9 +1,10 @@
-package es.ua.eps.filmoteca
+package es.ua.eps.filmoteca.activity
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
 
 class AboutActivity : AppCompatActivity() {
