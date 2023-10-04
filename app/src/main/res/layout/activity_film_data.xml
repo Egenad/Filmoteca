@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageView"
         android:layout_below="@id/film_director_header"
-        android:text="@string/film_director_value" />
+        android:text="@string/film_rf_director" />
 
     <TextView
         android:id="@+id/film_year_header"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/imageView"
         android:layout_below="@id/film_year_value"
-        android:text="@string/film_type_and_genere" />
+        android:text="@string/film_format_2" />
 
     <Button
         android:id="@+id/film_imdb"

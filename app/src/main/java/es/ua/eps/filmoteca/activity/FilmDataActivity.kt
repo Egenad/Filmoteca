@@ -2,16 +2,19 @@ package es.ua.eps.filmoteca.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import es.ua.eps.filmoteca.Film
+import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
-const val EXTRA_FILM_TITLE = "EXTRA_FILM_TITLE"
+const val EXTRA_FILM_POSITION = "EXTRA_FILM_POSITION"
 class FilmDataActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityFilmDataBinding
@@ -28,11 +31,11 @@ class FilmDataActivity : AppCompatActivity() {
         binding = ActivityFilmDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.filmImdb.setOnClickListener {
+        /*binding.filmImdb.setOnClickListener {
             startActivity(Intent(this@FilmDataActivity, FilmDataActivity::class.java)
                 .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_related_name))
             )
-        }
+        }*/
 
         binding.filmEdit.setOnClickListener {
 
@@ -50,7 +53,8 @@ class FilmDataActivity : AppCompatActivity() {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
         }
 
-        binding.filmData.text = intent.getStringExtra(EXTRA_FILM_TITLE)
+        updateInterface(FilmDataSource.films[intent.getIntExtra(EXTRA_FILM_POSITION, 0)])
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -64,5 +68,36 @@ class FilmDataActivity : AppCompatActivity() {
                 Toast.makeText(this, R.string.film_edit_result_ok, Toast.LENGTH_SHORT).show()
             }else if(resultCode == Activity.RESULT_CANCELED)
                 Toast.makeText(this, R.string.film_edit_result_cancelled, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateInterface(selectedFilm: Film){
+
+        val nullValue = resources.getString(R.string.nullValue)
+
+        binding.filmData.text = selectedFilm.title?: nullValue
+        binding.filmDirectorValue.text = selectedFilm.director?: nullValue
+        binding.filmYearValue.text = selectedFilm.year.toString()
+        binding.imageView.setImageResource(selectedFilm.imageResId)
+
+        var genre = nullValue
+        var format = nullValue
+
+        if(resources.getStringArray(R.array.genre_options).size > selectedFilm.genre)
+            genre = resources.getStringArray(R.array.genre_options)[selectedFilm.genre] ?: nullValue
+
+        if(resources.getStringArray(R.array.format_options).size > selectedFilm.format)
+            format = resources.getStringArray(R.array.format_options)[selectedFilm.format]?: nullValue
+
+        val genreType = "$format, $genre"
+
+        binding.filmTypeGenere.text = genreType
+
+        binding.filmImdb.setOnClickListener{
+            val imdbPageIntent = Intent(Intent.ACTION_VIEW,
+                Uri.parse(selectedFilm.imdbUrl))
+            if (imdbPageIntent.resolveActivity(packageManager) != null) {
+                startActivity(imdbPageIntent)
+            }
+        }
     }
 }

@@ -76,15 +76,15 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="20dp"
           android:minHeight="48dp"
-          android:prompt="@string/film_edit_genere_1"
-          android:entries="@array/genere_options"/>
+          android:prompt="@string/film_genre_1"
+          android:entries="@array/genre_options"/>
 
       <Spinner
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:minHeight="48dp"
           android:layout_marginTop="20dp"
-          android:prompt="@string/film_edit_format_1"
+          android:prompt="@string/film_format_1"
           android:entries="@array/format_options"/>
 
       <EditText android:layout_width="match_parent"

@@ -21,7 +21,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginEnd="16dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/film_image_cd"
+            android:contentDescription="@string/imageDescription"
             app:srcCompat="@drawable/back_to_future" />
 
         <TextView
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@id/film_data"
             android:layout_below="@id/film_director_header"
-            android:text="@string/film_director_value" />
+            android:text="@string/film_rf_director" />
 
         <TextView
             android:id="@+id/film_year_header"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@id/film_data"
             android:layout_below="@id/film_year_value"
-            android:text="@string/film_type_and_genere" />
+            android:text="@string/film_format_0" />
 
         <Button
             android:id="@+id/film_imdb"

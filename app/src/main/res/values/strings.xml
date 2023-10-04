@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Filmoteca</string>
-    <string name="functionality">Funcionalidad no implementada</string>
     <string name="film_editing">Editando película</string>
     <string name="film_edit_result_ok">Editado correctamente</string>
     <string name="film_edit_result_cancelled">Edición cancelada</string>
+    <string name="nullValue" translatable="false">Default/Null</string>
 
     <!-- ABOUT -->
     <string name="developed_by">Creada por Angel Terol</string>
@@ -14,26 +14,35 @@
     <string name="webPage" translatable="false">https://egenad.github.io/</string>
 
     <!-- FILM LIST -->
-    <string name="film_a">Ver película A</string>
-    <string name="film_b">Ver película B</string>
     <string name="about">Acerca de</string>
+    <string name="imageDescription">Póster de la película</string>
 
     <!-- FILM DATA -->
     <string name="film_data"><h1><b>Datos de la película</b></h1></string>
     <string name="film_imdb"><b>VER EN IMDB</b></string>
     <string name="film_edit"><b>EDITAR PELICULA</b></string>
     <string name="film_return"><b>VOLVER AL PRINCIPAL</b></string>
-    <string name="film_a_name">Harry Potter: La Piedra Filosofal</string>
-    <string name="film_b_name">Indiana Jones: En busca del Arca Perdida</string>
-    <string name="film_related_name">La Bella y la Bestia</string>
-    <string name="film_image_cd">Imagen de la película</string>
+    <string name="film_rf_name">Regreso al futuro</string>
+    <string name="film_rf_director" translatable="false">Robert Zemeckis</string>
+    <string name="film_h1_name">Harry Potter: La Piedra Filosofal</string>
+    <string name="film_h1_director" translatable="false">Chris Columbus</string>
+    <string name="film_h2_name">Harry Potter: La Cámara Secreta</string>
+    <string name="film_ij_name">Indiana Jones: En busca del Arca Perdida</string>
+    <string name="film_ij_director" translatable="false">Steven Spielberg</string>
     <string name="film_edit_result">Editado</string>
     <string name="film_year_header"><i>Año:</i></string>
     <string name="extended_version">Versión extendida</string>
     <string name="film_year_value" translatable="false">1985</string>
-    <string name="film_type_and_genere" translatable="false">Bluray, Sci-Fi</string>
-    <string name="film_director_value" translatable="false">Robert Zemeckis</string>
     <string name="film_director_header" translatable="false"><i>Director:</i></string>
+    <string name="film_genre_0">Acción</string>
+    <string name="film_genre_1">Comedia</string>
+    <string name="film_genre_2" translatable="false">Drama</string>
+    <string name="film_genre_3" translatable="false">Sci-Fi</string>
+    <string name="film_genre_4" translatable="false">Horror</string>
+    <string name="film_genre_5">Fantasía</string>
+    <string name="film_format_0" translatable="false">DVD</string>
+    <string name="film_format_1" translatable="false">Digital</string>
+    <string name="film_format_2" translatable="false">Blue-Ray</string>
 
     <!-- FILM EDIT -->
     <string name="film_photo">CAPTURA FOTOGRAFIA</string>
@@ -45,11 +54,5 @@
     <string name="film_edit_year">Año</string>
     <string name="film_edit_imdb">Enlace a IMDB</string>
     <string name="film_edit_comments">Comentarios</string>
-    <string name="film_edit_genere_1" translatable="false">Sci-Fi</string>
-    <string name="film_edit_genere_2">Acción</string>
-    <string name="film_edit_genere_3" translatable="false">Romance</string>
-    <string name="film_edit_format_1" translatable="false">DVD</string>
-    <string name="film_edit_format_2" translatable="false">VHS</string>
-    <string name="film_edit_format_3" translatable="false">Blue-Ray</string>
 
 </resources>
