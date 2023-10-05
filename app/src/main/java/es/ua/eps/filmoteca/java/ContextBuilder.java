@@ -12,6 +12,7 @@ public class ContextBuilder extends Application {
         mContext = this;
     }
 
+
     public static android.content.Context getContext(){
         return mContext;
     }

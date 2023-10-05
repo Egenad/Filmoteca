@@ -13,6 +13,7 @@ import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
+import kotlinx.coroutines.selects.select
 
 const val EXTRA_FILM_POSITION = "EXTRA_FILM_POSITION"
 class FilmDataActivity : AppCompatActivity() {
@@ -31,15 +32,10 @@ class FilmDataActivity : AppCompatActivity() {
         binding = ActivityFilmDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*binding.filmImdb.setOnClickListener {
-            startActivity(Intent(this@FilmDataActivity, FilmDataActivity::class.java)
-                .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_related_name))
-            )
-        }*/
-
         binding.filmEdit.setOnClickListener {
 
             val editIntent = Intent(this@FilmDataActivity, FilmEditActivity::class.java)
+                .putExtra(EXTRA_FILM_POSITION, intent.getIntExtra(EXTRA_FILM_POSITION, 0))
 
             if(Build.VERSION.SDK_INT >= 30)
                 startForResult.launch(editIntent)
@@ -63,8 +59,8 @@ class FilmDataActivity : AppCompatActivity() {
 
         if(requestCode == MOVIE_RESULT)
             if(resultCode == Activity.RESULT_OK){
-                val toString = binding.filmData.text.toString() + " - " + resources.getString(R.string.film_edit_result)
-                binding.filmData.text = toString
+                // Update interface with new values
+                updateInterface(FilmDataSource.films[intent.getIntExtra(EXTRA_FILM_POSITION, 0)])
                 Toast.makeText(this, R.string.film_edit_result_ok, Toast.LENGTH_SHORT).show()
             }else if(resultCode == Activity.RESULT_CANCELED)
                 Toast.makeText(this, R.string.film_edit_result_cancelled, Toast.LENGTH_SHORT).show()

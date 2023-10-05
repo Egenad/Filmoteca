@@ -55,4 +55,9 @@
     <string name="film_edit_imdb">Enlace a IMDB</string>
     <string name="film_edit_comments">Comentarios</string>
 
+    <!-- ERRORS -->
+
+    <string name="error_open_camera">ERROR: No se ha podido abrir la cámara</string>
+    <string name="error_take_photo">ERROR: No se ha podido guardar la fotografía</string>
+
 </resources>

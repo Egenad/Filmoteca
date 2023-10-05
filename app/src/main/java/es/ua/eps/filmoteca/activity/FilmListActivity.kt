@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
-import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.adapter.CustomAdapter
@@ -30,22 +28,5 @@ class FilmListActivity : ListActivity() {
             intent.putExtra(EXTRA_FILM_POSITION, position)
             startActivity(intent)
         }
-
-
-        /*binding.filmA.setOnClickListener {
-            startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java)
-                .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_a_name))
-            )
-        }
-
-        binding.filmB.setOnClickListener {
-            startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java)
-                .putExtra(EXTRA_FILM_TITLE, resources.getString(R.string.film_b_name))
-            )
-        }
-
-        binding.about.setOnClickListener {
-            startActivity(Intent(this@FilmListActivity, AboutActivity::class.java))
-        }*/
     }
 }
