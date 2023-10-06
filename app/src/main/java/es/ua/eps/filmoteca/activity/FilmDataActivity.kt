@@ -13,7 +13,6 @@ import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
-import kotlinx.coroutines.selects.select
 
 const val EXTRA_FILM_POSITION = "EXTRA_FILM_POSITION"
 class FilmDataActivity : AppCompatActivity() {

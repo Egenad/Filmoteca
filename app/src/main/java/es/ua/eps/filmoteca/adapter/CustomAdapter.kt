@@ -17,17 +17,17 @@ class CustomAdapter(
     override fun getView(position: Int, convertView: View?,
                          parent: ViewGroup
     ): View {
-        var view: View = convertView?: LayoutInflater.from(this.context)
+        val view: View = convertView?: LayoutInflater.from(this.context)
             .inflate(R.layout.film_item, parent, false)
 
-        val tvNombre = view.findViewById(R.id.itemName) as TextView
-        val tvDesc = view.findViewById(R.id.itemDirector) as TextView
-        val ivIcono = view.findViewById(R.id.itemPoster) as ImageView
+        val name = view.findViewById(R.id.itemName) as TextView
+        val director = view.findViewById(R.id.itemDirector) as TextView
+        val icon = view.findViewById(R.id.itemPoster) as ImageView
 
         getItem(position)?.let {
-            tvNombre.text = it.title
-            tvDesc.text = it.director
-            ivIcono.setImageResource(it.imageResId)
+            name.text = it.title
+            director.text = it.director
+            icon.setImageResource(it.imageResId)
         }
 
         return view

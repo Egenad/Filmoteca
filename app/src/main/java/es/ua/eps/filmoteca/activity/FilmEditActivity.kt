@@ -1,11 +1,9 @@
 package es.ua.eps.filmoteca.activity
 
-import android.R.attr
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
