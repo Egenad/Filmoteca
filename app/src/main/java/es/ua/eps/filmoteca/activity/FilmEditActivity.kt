@@ -115,7 +115,8 @@ class FilmEditActivity : AppCompatActivity() {
                 Toast.makeText(this, R.string.error_take_photo, Toast.LENGTH_LONG).show()
             }
         }else if(requestCode == REQUEST_MEDIA_FILE && resultCode == Activity.RESULT_OK){
-            val bitmap = data?.extras?.get("data") as Bitmap
+            val selectedImageUri = data?.data
+            val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
             binding.imageView.setImageBitmap(bitmap)
         }
     }
