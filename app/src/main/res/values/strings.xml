@@ -14,8 +14,9 @@
     <string name="webPage" translatable="false">https://egenad.github.io/</string>
 
     <!-- FILM LIST -->
-    <string name="about">Acerca de</string>
+    <string name="menu_about">Acerca de</string>
     <string name="imageDescription">Póster de la película</string>
+    <string name="menu_add_film">Añadir Película</string>
 
     <!-- FILM DATA -->
     <string name="film_data"><h1><b>Datos de la película</b></h1></string>

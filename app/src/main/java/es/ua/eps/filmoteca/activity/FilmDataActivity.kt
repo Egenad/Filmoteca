@@ -31,6 +31,8 @@ class FilmDataActivity : AppCompatActivity() {
         binding = ActivityFilmDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.includeAppbar.toolbar)
+
         binding.filmEdit.setOnClickListener {
 
             val editIntent = Intent(this@FilmDataActivity, FilmEditActivity::class.java)

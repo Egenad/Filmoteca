@@ -33,4 +33,8 @@ class CustomAdapter(
         return view
     }
 
+    override fun notifyDataSetChanged() {
+        super.notifyDataSetChanged()
+    }
+
 }

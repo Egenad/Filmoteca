@@ -40,6 +40,8 @@ class FilmEditActivity : AppCompatActivity() {
         binding = ActivityFilmEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.includeAppbar.toolbar)
+
         binding.filmSave.setOnClickListener{
 
             // Retrieve fields data and save them to the selectedFilm

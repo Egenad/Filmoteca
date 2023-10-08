@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".activity.AboutActivity">
 
+    <include
+        android:id="@+id/include_appbar"
+        layout="@layout/app_bar_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="146dp"

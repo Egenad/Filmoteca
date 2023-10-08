@@ -57,4 +57,20 @@ object FilmDataSource {
         films.add(f)
 
     }
+
+    fun addDefaultFilm(){
+
+        val resources = ContextBuilder.getContext().resources
+
+        val f = Film()
+        f.title = resources.getString(R.string.film_rf_name)
+        f.director = resources.getString(R.string.film_rf_director)
+        f.imageResId = R.drawable.back_to_future
+        f.comments = ""
+        f.format = Film.FORMAT_DIGITAL
+        f.genre = Film.GENRE_SCIFI
+        f.imdbUrl = "http://www.imdb.com/title/tt0088763"
+        f.year = 1985
+        films.add(f)
+    }
 }

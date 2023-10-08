@@ -16,6 +16,8 @@ class AboutActivity : AppCompatActivity() {
         binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.includeAppbar.toolbar)
+
         binding.webpage.setOnClickListener{
             val webPageIntent = Intent(Intent.ACTION_VIEW,
                 Uri.parse(resources.getString(R.string.webPage)))
