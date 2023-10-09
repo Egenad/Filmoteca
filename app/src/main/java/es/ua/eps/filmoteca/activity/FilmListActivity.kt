@@ -2,18 +2,17 @@ package es.ua.eps.filmoteca.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import es.ua.eps.filmoteca.CustomAMCallback
+import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.adapter.CustomAdapter
@@ -31,6 +30,8 @@ class FilmListActivity : AppCompatActivity() {
 
     private lateinit var bindingRecycled : ActivityFilmListRecycledBinding
     private lateinit var binding : ActivityFilmListBinding
+
+    private var customCallback : CustomAMCallback = CustomAMCallback()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,18 +53,9 @@ class FilmListActivity : AppCompatActivity() {
         bindingRecycled.list.layoutManager = LinearLayoutManager(this)
         bindingRecycled.list.itemAnimator = DefaultItemAnimator()
         val recyclerAdapter = RecycledAdapter(FilmDataSource.films)
-
-        recyclerAdapter.setOnItemClickListener {
-            filmPosition ->  startActivity(Intent(this@FilmListActivity, FilmDataActivity::class.java)
-            .putExtra(EXTRA_FILM_POSITION, filmPosition))
-        }
-
-        recyclerAdapter.setOnLongItemClickListener {
-            Toast.makeText(this, "AAA", Toast.LENGTH_LONG).show()
-            false
-        }
-
         bindingRecycled.list.adapter = recyclerAdapter
+
+        createRecycledViewListeners()
     }
 
     private fun createListView(){
@@ -75,51 +67,8 @@ class FilmListActivity : AppCompatActivity() {
 
         binding.list.adapter = CustomAdapter(this, R.layout.film_item, FilmDataSource.films)
 
-        binding.list.setOnItemClickListener { parent: AdapterView<*>, view: View,
-                                              position: Int, id: Long ->
-            val intent = Intent(this@FilmListActivity, FilmDataActivity::class.java)
-            intent.putExtra(EXTRA_FILM_POSITION, position)
-            startActivity(intent)
-        }
+        createListViewListeners()
 
-        binding.list.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
-
-        binding.list.setMultiChoiceModeListener(
-            object : AbsListView.MultiChoiceModeListener {
-                override fun onCreateActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
-                    val inflater = p0?.menuInflater
-                    inflater?.inflate(R.menu.contextual_menu, p1)
-                    return true
-                }
-
-                override fun onPrepareActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
-                    return false
-                }
-
-                override fun onActionItemClicked(
-                    p0: android.view.ActionMode?,
-                    p1: MenuItem?
-                ): Boolean {
-                    return when (p1?.itemId) {
-                        R.id.multiple_delete -> {
-                            Log.e("SOS", "LOG")
-                            true
-                        }
-                        else -> false
-                    }
-                }
-
-                override fun onDestroyActionMode(p0: android.view.ActionMode?) {}
-
-                override fun onItemCheckedStateChanged(
-                    p0: android.view.ActionMode?,
-                    p1: Int,
-                    p2: Long,
-                    p3: Boolean
-                ) {}
-
-            }
-        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -149,5 +98,104 @@ class FilmListActivity : AppCompatActivity() {
         }
 
         return false
+    }
+
+    private fun createRecycledViewListeners(){
+
+        val recycledList = bindingRecycled.list
+        val recyclerAdapter = recycledList.adapter as RecycledAdapter
+
+        recyclerAdapter.setOnItemClickListener {
+            filmPosition ->
+            run {
+                if (customCallback.actionMode != null) {
+                    // MULTIPLE SELECTION
+                    customCallback.actionItemClicked(filmPosition)
+
+                } else {
+                    startActivity(
+                        Intent(this@FilmListActivity, FilmDataActivity::class.java)
+                            .putExtra(EXTRA_FILM_POSITION, filmPosition)
+                    )
+                }
+            }
+        }
+
+        recyclerAdapter.setOnLongItemClickListener {
+            if (customCallback.actionMode != null) {
+                false
+            } else {
+                customCallback.startSupportActionMode(this, recyclerAdapter)
+                customCallback.actionItemClicked(it)
+                true
+            }
+        }
+    }
+
+    private fun createListViewListeners(){
+
+        binding.list.setOnItemClickListener { parent: AdapterView<*>, view: View,
+                                              position: Int, id: Long ->
+            val intent = Intent(this@FilmListActivity, FilmDataActivity::class.java)
+            intent.putExtra(EXTRA_FILM_POSITION, position)
+            startActivity(intent)
+        }
+
+        binding.list.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+
+        binding.list.setMultiChoiceModeListener(
+            object : AbsListView.MultiChoiceModeListener {
+                override fun onCreateActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
+                    val inflater = p0?.menuInflater
+                    inflater?.inflate(R.menu.contextual_menu, p1)
+                    setTitle(p0, 1)
+                    return true
+                }
+
+                override fun onPrepareActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
+                    return false
+                }
+
+                override fun onActionItemClicked(
+                    p0: android.view.ActionMode?,
+                    p1: MenuItem?
+                ): Boolean {
+                    return when (p1?.itemId) {
+                        R.id.multiple_delete -> {
+                            // Delete selected films
+                            FilmDataSource.deleteSelectedFilms()
+                            val customAdapter = binding.list.adapter as CustomAdapter
+                            customAdapter.notifyDataSetChanged()
+                            setTitle(p0, 0)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                override fun onDestroyActionMode(p0: android.view.ActionMode?) {
+                    FilmDataSource.selectAllItems(false)
+                }
+
+                override fun onItemCheckedStateChanged(
+                    p0: android.view.ActionMode?,
+                    p1: Int,
+                    p2: Long,
+                    p3: Boolean
+                ) {
+                    (binding.list.getItemAtPosition(p1) as Film).selected = p3
+                    val customAdapter = binding.list.adapter as CustomAdapter
+
+                    setTitle(p0, FilmDataSource.getSelectedFilmsCount())
+
+                    customAdapter.notifyDataSetChanged()
+                }
+
+                private fun setTitle(p0: android.view.ActionMode?, count : Int){
+                    val title : String = count.toString() + " " + resources.getString(R.string.films_selected)
+                    p0?.title = title
+                }
+            }
+        )
     }
 }

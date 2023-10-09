@@ -1,5 +1,6 @@
 package es.ua.eps.filmoteca.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,13 +26,13 @@ class RecycledAdapter(val filmList: List<Film>) :
             listener(holder.adapterPosition)
         }
 
-
         v.setOnLongClickListener {
             listenerLong(holder.adapterPosition)
         }
 
         return holder
     }
+
     override fun getItemCount(): Int {
         return filmList.size
     }
@@ -43,17 +44,23 @@ class RecycledAdapter(val filmList: List<Film>) :
         private var name: TextView
         private var director: TextView
         private var icon: ImageView
+        private val view = v
 
         fun bind(it: Film) {
             name.text = it.title
             director.text = it.director
             icon.setImageResource(it.imageResId)
+
+            if(it.selected)
+                view.setBackgroundColor(Color.GRAY)
+            else
+                view.setBackgroundColor(Color.WHITE)
         }
 
         init {
-            name = v.findViewById(R.id.itemName)
-            director = v.findViewById(R.id.itemDirector)
-            icon = v.findViewById(R.id.itemPoster)
+            director = view.findViewById(R.id.itemDirector)
+            name = view.findViewById(R.id.itemName)
+            icon = view.findViewById(R.id.itemPoster)
         }
     }
 

@@ -9,6 +9,7 @@ class Film {
     var format = 0
     var imdbUrl: String? = null
     var comments: String? = null
+    var selected: Boolean = false
 
     override fun toString(): String {
         return title?:"<Sin titulo>"

@@ -63,14 +63,44 @@ object FilmDataSource {
         val resources = ContextBuilder.getContext().resources
 
         val f = Film()
-        f.title = resources.getString(R.string.film_rf_name)
-        f.director = resources.getString(R.string.film_rf_director)
-        f.imageResId = R.drawable.back_to_future
+        f.title = resources.getString(R.string.film_default_title)
+        f.director = resources.getString(R.string.film_default_director)
+        f.imageResId = android.R.drawable.ic_menu_gallery
         f.comments = ""
         f.format = Film.FORMAT_DIGITAL
         f.genre = Film.GENRE_SCIFI
-        f.imdbUrl = "http://www.imdb.com/title/tt0088763"
-        f.year = 1985
+        f.imdbUrl = resources.getString(R.string.film_default_imdb)
+        f.year = 2000
         films.add(f)
+    }
+
+    fun selectAllItems(selection : Boolean){
+        for (film in films){
+            film.selected = selection
+        }
+    }
+
+    fun getSelectedFilmsCount() : Int {
+
+        var count = 0
+
+        for (film in films){
+            if(film.selected)
+                count++
+        }
+
+        return count
+    }
+
+    fun deleteSelectedFilms(){
+
+        val newFilmList: MutableList<Film> = mutableListOf()
+
+        for (film in films){
+            if(film.selected)
+                newFilmList.add(film)
+        }
+
+        films.removeAll(newFilmList)
     }
 }
