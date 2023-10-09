@@ -13,6 +13,7 @@ class RecycledAdapter(val filmList: List<Film>) :
     RecyclerView.Adapter<RecycledAdapter.ViewHolder?>() {
 
     private var listener: (filmPosition: Int) -> Unit = {}
+    private var listenerLong: (filmPosition: Int) -> Boolean = {false}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v: View = LayoutInflater.from(parent.context)
@@ -22,6 +23,11 @@ class RecycledAdapter(val filmList: List<Film>) :
 
         v.setOnClickListener {
             listener(holder.adapterPosition)
+        }
+
+
+        v.setOnLongClickListener {
+            listenerLong(holder.adapterPosition)
         }
 
         return holder
@@ -53,6 +59,10 @@ class RecycledAdapter(val filmList: List<Film>) :
 
     fun setOnItemClickListener(listener: (filmPosition: Int) -> Unit) {
         this.listener = listener
+    }
+
+    fun setOnLongItemClickListener(listener: (filmPosition: Int) -> Boolean) {
+        this.listenerLong = listener
     }
 
 }

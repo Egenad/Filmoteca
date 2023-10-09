@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
 
@@ -17,6 +18,8 @@ class AboutActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.includeAppbar.toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.webpage.setOnClickListener{
             val webPageIntent = Intent(Intent.ACTION_VIEW,
@@ -34,12 +37,25 @@ class AboutActivity : AppCompatActivity() {
             }
         }
 
-        binding.back.setOnClickListener{
-            finish()
-        }
+        binding.back.setOnClickListener{ returnButton() }
     }
 
     private fun checkResolveNull(customIntent : Intent) : Boolean {
         return customIntent.resolveActivity(packageManager) != null
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when(item.itemId){
+            android.R.id.home -> returnButton()
+        }
+
+        return false
+    }
+
+    private fun returnButton(){
+        startActivity(Intent(this@AboutActivity, FilmListActivity::class.java)
+        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 }

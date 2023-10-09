@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,8 @@ class FilmDataActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.includeAppbar.toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.filmEdit.setOnClickListener {
 
@@ -45,10 +48,7 @@ class FilmDataActivity : AppCompatActivity() {
                 startActivityForResult(editIntent, MOVIE_RESULT)
         }
 
-        binding.filmReturn.setOnClickListener {
-            startActivity(Intent(this@FilmDataActivity, FilmListActivity::class.java)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-        }
+        binding.filmReturn.setOnClickListener { returnButton() }
 
         updateInterface(FilmDataSource.films[intent.getIntExtra(EXTRA_FILM_POSITION, 0)])
 
@@ -96,5 +96,20 @@ class FilmDataActivity : AppCompatActivity() {
                 startActivity(imdbPageIntent)
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when(item.itemId){
+            android.R.id.home -> returnButton()
+        }
+
+        return false
+    }
+
+    private fun returnButton(){
+        startActivity(Intent(this@FilmDataActivity, FilmListActivity::class.java)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 }

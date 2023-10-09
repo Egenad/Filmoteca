@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,6 +42,8 @@ class FilmEditActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.includeAppbar.toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.filmSave.setOnClickListener{
 
@@ -64,10 +67,7 @@ class FilmEditActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.filmCancel.setOnClickListener{
-            setResult(Activity.RESULT_CANCELED, null)
-            finish()
-        }
+        binding.filmCancel.setOnClickListener{ returnButton() }
 
         binding.filmPhoto.setOnClickListener {
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -132,5 +132,20 @@ class FilmEditActivity : AppCompatActivity() {
         binding.filmEditComments?.setText(selectedFilm.comments?: "")
         binding.filmEditGenre?.setSelection(selectedFilm.genre)
         binding.filmEditFormat?.setSelection(selectedFilm.format)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+
+        when(item.itemId){
+            android.R.id.home -> returnButton()
+        }
+
+        return false
+    }
+
+    private fun returnButton(){
+        setResult(Activity.RESULT_CANCELED, null)
+        finish()
     }
 }

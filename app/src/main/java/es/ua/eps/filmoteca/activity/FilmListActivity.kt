@@ -2,11 +2,16 @@ package es.ua.eps.filmoteca.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AbsListView
 import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.ua.eps.filmoteca.FilmDataSource
@@ -42,6 +47,7 @@ class FilmListActivity : AppCompatActivity() {
         setContentView(bindingRecycled.root)
 
         setSupportActionBar(bindingRecycled.includeAppbar.toolbar)
+        registerForContextMenu(bindingRecycled.list)
 
         bindingRecycled.list.layoutManager = LinearLayoutManager(this)
         bindingRecycled.list.itemAnimator = DefaultItemAnimator()
@@ -52,6 +58,11 @@ class FilmListActivity : AppCompatActivity() {
             .putExtra(EXTRA_FILM_POSITION, filmPosition))
         }
 
+        recyclerAdapter.setOnLongItemClickListener {
+            Toast.makeText(this, "AAA", Toast.LENGTH_LONG).show()
+            false
+        }
+
         bindingRecycled.list.adapter = recyclerAdapter
     }
 
@@ -60,6 +71,7 @@ class FilmListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.includeAppbar.toolbar)
+        registerForContextMenu(binding.list)
 
         binding.list.adapter = CustomAdapter(this, R.layout.film_item, FilmDataSource.films)
 
@@ -69,6 +81,45 @@ class FilmListActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_FILM_POSITION, position)
             startActivity(intent)
         }
+
+        binding.list.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+
+        binding.list.setMultiChoiceModeListener(
+            object : AbsListView.MultiChoiceModeListener {
+                override fun onCreateActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
+                    val inflater = p0?.menuInflater
+                    inflater?.inflate(R.menu.contextual_menu, p1)
+                    return true
+                }
+
+                override fun onPrepareActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
+                    return false
+                }
+
+                override fun onActionItemClicked(
+                    p0: android.view.ActionMode?,
+                    p1: MenuItem?
+                ): Boolean {
+                    return when (p1?.itemId) {
+                        R.id.multiple_delete -> {
+                            Log.e("SOS", "LOG")
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                override fun onDestroyActionMode(p0: android.view.ActionMode?) {}
+
+                override fun onItemCheckedStateChanged(
+                    p0: android.view.ActionMode?,
+                    p1: Int,
+                    p2: Long,
+                    p3: Boolean
+                ) {}
+
+            }
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

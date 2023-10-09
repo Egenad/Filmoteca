@@ -21,11 +21,11 @@
     <string name="support">Obtain support</string>
     <string name="back">Return</string>
 
-
     <!-- FILM LIST -->
     <string name="imageDescription">Film poster</string>
     <string name="menu_about">About</string>
     <string name="menu_add_film">Add Film</string>
+    <string name="delete_films">Delete Films</string>
 
     <!-- FILM DATA -->
     <string name="film_rf_name">Back to the future</string>
