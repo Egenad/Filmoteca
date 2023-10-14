@@ -3,127 +3,115 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
     tools:context=".activity.FilmDataActivity">
 
-    <include
-        android:id="@+id/include_appbar"
-        layout="@layout/app_bar_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="149dp"
+        android:layout_height="180dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="16dp"
+        app:srcCompat="@drawable/back_to_future"
+        android:contentDescription="@string/imageDescription" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_below="@id/include_appbar"
-        android:paddingLeft="16dp"
-        android:paddingTop="16dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="16dp"
-        android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/film_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
+        android:text="@string/film_data" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="149dp"
-            android:layout_height="180dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/back_to_future" />
+    <TextView
+        android:id="@+id/film_director_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_below="@id/film_data"
+        android:text="@string/film_director_header" />
 
-        <TextView
-            android:id="@+id/film_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView"
-            android:text="@string/film_data" />
+    <TextView
+        android:id="@+id/film_director_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_below="@id/film_director_header"
+        android:text="@string/film_rf_director" />
 
-        <TextView
-            android:id="@+id/film_director_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_below="@id/film_data"
-            android:text="@string/film_director_header" />
+    <TextView
+        android:id="@+id/film_year_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_below="@id/film_director_value"
+        android:text="@string/film_year_header" />
 
-        <TextView
-            android:id="@+id/film_director_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_below="@id/film_director_header"
-            android:text="@string/film_rf_director" />
+    <TextView
+        android:id="@+id/film_year_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_below="@id/film_year_header"
+        android:text="@string/film_year_value" />
 
-        <TextView
-            android:id="@+id/film_year_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_below="@id/film_director_value"
-            android:text="@string/film_year_header" />
+    <TextView
+        android:id="@+id/film_type_genere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imageView"
+        android:layout_below="@id/film_year_value"
+        android:text="@string/film_format_2" />
 
-        <TextView
-            android:id="@+id/film_year_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_below="@id/film_year_header"
-            android:text="@string/film_year_value" />
+    <Button
+        android:id="@+id/film_imdb"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/film_type_genere"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@id/imageView"
+        android:text="@string/film_imdb" />
 
-        <TextView
-            android:id="@+id/film_type_genere"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imageView"
-            android:layout_below="@id/film_year_value"
-            android:text="@string/film_format_2" />
+    <TextView
+        android:id="@+id/extended_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:text="@string/extended_version" />
 
-        <Button
-            android:id="@+id/film_imdb"
-            style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/film_type_genere"
-            android:layout_marginTop="16dp"
-            android:layout_toEndOf="@id/imageView"
-            android:text="@string/film_imdb" />
+    <Button
+        android:id="@+id/film_return"
+        android:text="@string/film_return"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/extended_version"
+        android:layout_toStartOf="@+id/centerPoint" />
 
-        <TextView
-            android:id="@+id/extended_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
-            android:layout_alignStart="@+id/imageView"
-            android:text="@string/extended_version" />
+    <TextView
+        android:id="@+id/centerPoint"
+        android:text=""
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/extended_version"
+        android:layout_centerHorizontal="true" />
 
-        <Button
-            android:id="@+id/film_return"
-            android:text="@string/film_return"
-            style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/extended_version"
-            android:layout_toStartOf="@+id/centerPoint" />
-
-        <TextView
-            android:id="@+id/centerPoint"
-            android:text=""
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/extended_version"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:id="@+id/film_edit"
-            android:text="@string/film_edit"
-            style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/film_return"
-            android:layout_alignBottom="@+id/film_return"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/extended_version"
-            android:layout_toEndOf="@+id/centerPoint" />
-
-    </RelativeLayout>
+    <Button
+        android:id="@+id/film_edit"
+        android:text="@string/film_edit"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/film_return"
+        android:layout_alignBottom="@+id/film_return"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/extended_version"
+        android:layout_toEndOf="@+id/centerPoint" />
 
 </RelativeLayout>

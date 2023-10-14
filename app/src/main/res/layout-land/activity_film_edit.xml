@@ -32,7 +32,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:layout_weight="1"
-            app:srcCompat="@drawable/back_to_future" />
+            app:srcCompat="@drawable/back_to_future"
+            android:contentDescription="@string/imageDescription" />
 
         <Button
             android:id="@+id/film_photo"

@@ -1,19 +1,19 @@
 package es.ua.eps.filmoteca.activity
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
-import es.ua.eps.filmoteca.adapter.CustomAdapter
-import es.ua.eps.filmoteca.databinding.ActivityFilmListRecycledBinding
 import es.ua.eps.filmoteca.databinding.ActivityMainBinding
+import es.ua.eps.filmoteca.fragment.EXTRA_FILM_POSITION
+import es.ua.eps.filmoteca.fragment.FilmDataFragment
 import es.ua.eps.filmoteca.fragment.FilmListFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),
+            FilmListFragment.OnItemSelectedListener {
 
     companion object {
         private val ID_ADD_FILM = Menu.FIRST
@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includeAppbar.toolbar)
+
+        if(mainBinding.fragmentContainer != null && savedInstanceState == null)
+            initDynamicFragment()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,16 +51,38 @@ class MainActivity : AppCompatActivity() {
             ID_ADD_FILM ->{
                 FilmDataSource.addDefaultFilm()
 
-                val listFragment : FilmListFragment? = if(Build.VERSION.SDK_INT >= 28)
-                    supportFragmentManager.findFragmentById(R.id.list_fragment) as FilmListFragment
-                else
-                    fragmentManager.findFragmentById(R.id.list_fragment) as FilmListFragment?
-
-                listFragment?.notifyItemInserted()
+                val listFragment = supportFragmentManager.findFragmentById(R.id.list_fragment) as FilmListFragment
+                listFragment.notifyItemInserted()
             }
         }
 
         return false
+    }
+
+    private fun initDynamicFragment(){
+        val listFragment = FilmListFragment()
+        listFragment.arguments = intent.extras
+        supportFragmentManager.beginTransaction().add(R.id.fragment_container, listFragment).commit()
+    }
+
+    override fun onItemSelected(position: Int) {
+
+        var dataFragment = supportFragmentManager.findFragmentById(R.id.data_fragment) as? FilmDataFragment
+
+        if (dataFragment != null) {
+            dataFragment.updateInterfaceByPositionId(position)
+        } else {
+
+            dataFragment = FilmDataFragment()
+            val args = Bundle()
+            args.putInt(EXTRA_FILM_POSITION, position)
+            dataFragment.arguments = args
+
+            val t = supportFragmentManager.beginTransaction()
+            t.replace(R.id.fragment_container, dataFragment)
+            t.addToBackStack(null)
+            t.commit()
+        }
     }
 
 }

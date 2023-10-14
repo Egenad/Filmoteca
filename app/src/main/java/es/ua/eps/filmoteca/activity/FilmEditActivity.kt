@@ -17,6 +17,7 @@ import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
+import es.ua.eps.filmoteca.fragment.EXTRA_FILM_POSITION
 
 
 class FilmEditActivity : AppCompatActivity() {
@@ -41,7 +42,7 @@ class FilmEditActivity : AppCompatActivity() {
         binding = ActivityFilmEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //setSupportActionBar(binding.includeAppbar.toolbar)
+        setSupportActionBar(binding.includeAppbar.toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

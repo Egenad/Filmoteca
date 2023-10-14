@@ -1,5 +1,6 @@
 package es.ua.eps.filmoteca.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,12 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.ListFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,9 +19,6 @@ import es.ua.eps.filmoteca.CustomAMCallback
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
-import es.ua.eps.filmoteca.activity.AboutActivity
-import es.ua.eps.filmoteca.activity.EXTRA_FILM_POSITION
-import es.ua.eps.filmoteca.activity.FilmDataActivity
 import es.ua.eps.filmoteca.adapter.CustomAdapter
 import es.ua.eps.filmoteca.adapter.RecycledAdapter
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
@@ -37,6 +31,8 @@ class FilmListFragment : ListFragment() {
     private lateinit var binding : ActivityFilmListBinding
 
     private var customCallback : CustomAMCallback = CustomAMCallback()
+
+    private var callback: OnItemSelectedListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,10 +100,10 @@ class FilmListFragment : ListFragment() {
                     customCallback.actionItemClicked(filmPosition)
 
                 } else {
-                    startActivity(
+                    /*startActivity(
                         Intent(activity, FilmDataActivity::class.java)
                             .putExtra(EXTRA_FILM_POSITION, filmPosition)
-                    )
+                    )*/
                 }
             }
         }
@@ -123,11 +119,23 @@ class FilmListFragment : ListFragment() {
         }
     }
 
+    interface OnItemSelectedListener {
+        fun onItemSelected(position: Int)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = try {
+            context as OnItemSelectedListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString()
+                    + " debe implementar OnItemSelectedListener")
+        }
+    }
+
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
-        val intent = Intent(activity, FilmDataActivity::class.java)
-        intent.putExtra(EXTRA_FILM_POSITION, position)
-        startActivity(intent)
+        callback?.onItemSelected(position)
     }
 
     private fun createListViewListeners(){

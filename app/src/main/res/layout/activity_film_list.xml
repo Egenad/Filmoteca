@@ -8,4 +8,5 @@
     android:id="@android:id/list"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/include_appbar"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
     />

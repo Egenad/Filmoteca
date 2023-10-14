@@ -14,10 +14,21 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <androidx.fragment.app.FragmentContainerView android:name="es.ua.eps.filmoteca.fragment.FilmListFragment"
+    <!--<androidx.fragment.app.FragmentContainerView android:name="es.ua.eps.filmoteca.fragment.FilmListFragment"
         android:id="@+id/list_fragment"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
+
+    <androidx.fragment.app.FragmentContainerView android:name="es.ua.eps.filmoteca.fragment.FilmDataFragment"
+        android:id="@+id/data_fragment"
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />-->
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>
