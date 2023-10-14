@@ -55,7 +55,7 @@ class AboutActivity : AppCompatActivity() {
     }
 
     private fun returnButton(){
-        startActivity(Intent(this@AboutActivity, FilmListActivity::class.java)
+        startActivity(Intent(this@AboutActivity, MainActivity::class.java)
         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 }

@@ -109,7 +109,7 @@ class FilmDataActivity : AppCompatActivity() {
     }
 
     private fun returnButton(){
-        startActivity(Intent(this@FilmDataActivity, FilmListActivity::class.java)
+        startActivity(Intent(this@FilmDataActivity, MainActivity::class.java)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 }

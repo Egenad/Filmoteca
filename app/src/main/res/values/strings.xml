@@ -65,5 +65,7 @@
 
     <string name="error_open_camera">ERROR: No se ha podido abrir la cámara</string>
     <string name="error_take_photo">ERROR: No se ha podido guardar la fotografía</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

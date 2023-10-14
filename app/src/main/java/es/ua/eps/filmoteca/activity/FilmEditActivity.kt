@@ -41,7 +41,7 @@ class FilmEditActivity : AppCompatActivity() {
         binding = ActivityFilmEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.includeAppbar.toolbar)
+        //setSupportActionBar(binding.includeAppbar.toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

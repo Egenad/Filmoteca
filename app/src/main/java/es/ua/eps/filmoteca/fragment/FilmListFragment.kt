@@ -1,103 +1,94 @@
-package es.ua.eps.filmoteca.activity
+package es.ua.eps.filmoteca.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.ListFragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.ua.eps.filmoteca.CustomAMCallback
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
+import es.ua.eps.filmoteca.activity.AboutActivity
+import es.ua.eps.filmoteca.activity.EXTRA_FILM_POSITION
+import es.ua.eps.filmoteca.activity.FilmDataActivity
 import es.ua.eps.filmoteca.adapter.CustomAdapter
 import es.ua.eps.filmoteca.adapter.RecycledAdapter
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 import es.ua.eps.filmoteca.databinding.ActivityFilmListRecycledBinding
+import java.lang.Exception
 
-class FilmListActivity : AppCompatActivity() {
-
-    companion object {
-        private val ID_ADD_FILM = Menu.FIRST
-        private val ID_ABOUT = Menu.FIRST + 1
-        private val ID_GROUP = Menu.FIRST
-    }
+class FilmListFragment : ListFragment() {
 
     private lateinit var bindingRecycled : ActivityFilmListRecycledBinding
     private lateinit var binding : ActivityFilmListBinding
 
     private var customCallback : CustomAMCallback = CustomAMCallback()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-        if(resources.getBoolean(R.bool.use_recycled_view)) {
-            createRecycledView()
-        }else {
-            createListView()
-        }
+        if(resources.getBoolean(R.bool.use_recycled_view))
+            return createRecycledView()
+
+        return createListView()
     }
 
-    private fun createRecycledView(){
-        bindingRecycled = ActivityFilmListRecycledBinding.inflate(layoutInflater)
-        setContentView(bindingRecycled.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        //setSupportActionBar(bindingRecycled.includeAppbar.toolbar)
+        try {
+            super.onViewCreated(view, savedInstanceState)
+        }catch (ex : Exception){
+            Log.w(this.javaClass.toString(), ex.message.toString()) // Not a ListView
+        }
+
+        if(resources.getBoolean(R.bool.use_recycled_view))
+            createRecycledViewListeners()
+        else
+            createListViewListeners()
+    }
+
+    private fun createRecycledView() : View{
+
+        bindingRecycled = ActivityFilmListRecycledBinding.inflate(layoutInflater)
+
         registerForContextMenu(bindingRecycled.list)
 
-        bindingRecycled.list.layoutManager = LinearLayoutManager(this)
+        bindingRecycled.list.layoutManager = LinearLayoutManager(activity as AppCompatActivity?)
         bindingRecycled.list.itemAnimator = DefaultItemAnimator()
         val recyclerAdapter = RecycledAdapter(FilmDataSource.films)
         bindingRecycled.list.adapter = recyclerAdapter
 
-        createRecycledViewListeners()
+        return bindingRecycled.list
     }
 
-    private fun createListView(){
-        binding = ActivityFilmListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private fun createListView() : View{
 
-        //setSupportActionBar(binding.includeAppbar.toolbar)
+        binding = ActivityFilmListBinding.inflate(layoutInflater)
+
         registerForContextMenu(binding.list)
 
-        binding.list.adapter = CustomAdapter(this, R.layout.film_item, FilmDataSource.films)
+        binding.list.adapter = CustomAdapter(activity, R.layout.film_item, FilmDataSource.films)
 
-        createListViewListeners()
+        listAdapter =  binding.list.adapter
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-
-        menu?.add(ID_GROUP, ID_ADD_FILM, Menu.NONE, resources.getString(R.string.menu_add_film))
-        menu?.add(ID_GROUP, ID_ABOUT, Menu.NONE, resources.getString(R.string.menu_about))
-
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-
-        when(item.itemId){
-            ID_ABOUT -> startActivity(Intent(this@FilmListActivity, AboutActivity::class.java))
-            ID_ADD_FILM ->{
-                FilmDataSource.addDefaultFilm()
-
-                if(resources.getBoolean(R.bool.use_recycled_view)) {
-                    bindingRecycled.list.adapter?.notifyItemInserted(FilmDataSource.films.size - 1)
-                }else{
-                    val customAdapter = binding.list.adapter as CustomAdapter
-                    customAdapter.notifyDataSetChanged()
-                }
-            }
-        }
-
-        return false
+        return binding.root
     }
 
     private fun createRecycledViewListeners(){
@@ -106,7 +97,7 @@ class FilmListActivity : AppCompatActivity() {
         val recyclerAdapter = recycledList.adapter as RecycledAdapter
 
         recyclerAdapter.setOnItemClickListener {
-            filmPosition ->
+                filmPosition ->
             run {
                 if (customCallback.actionMode != null) {
                     // MULTIPLE SELECTION
@@ -114,7 +105,7 @@ class FilmListActivity : AppCompatActivity() {
 
                 } else {
                     startActivity(
-                        Intent(this@FilmListActivity, FilmDataActivity::class.java)
+                        Intent(activity, FilmDataActivity::class.java)
                             .putExtra(EXTRA_FILM_POSITION, filmPosition)
                     )
                 }
@@ -125,25 +116,25 @@ class FilmListActivity : AppCompatActivity() {
             if (customCallback.actionMode != null) {
                 false
             } else {
-                customCallback.startSupportActionMode(this, recyclerAdapter)
+                customCallback.startSupportActionMode((activity as AppCompatActivity?)!!, recyclerAdapter)
                 customCallback.actionItemClicked(it)
                 true
             }
         }
     }
 
+    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+        super.onListItemClick(l, v, position, id)
+        val intent = Intent(activity, FilmDataActivity::class.java)
+        intent.putExtra(EXTRA_FILM_POSITION, position)
+        startActivity(intent)
+    }
+
     private fun createListViewListeners(){
 
-        binding.list.setOnItemClickListener { parent: AdapterView<*>, view: View,
-                                              position: Int, id: Long ->
-            val intent = Intent(this@FilmListActivity, FilmDataActivity::class.java)
-            intent.putExtra(EXTRA_FILM_POSITION, position)
-            startActivity(intent)
-        }
+        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
 
-        binding.list.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
-
-        binding.list.setMultiChoiceModeListener(
+        listView.setMultiChoiceModeListener(
             object : AbsListView.MultiChoiceModeListener {
                 override fun onCreateActionMode(p0: android.view.ActionMode?, p1: Menu?): Boolean {
                     val inflater = p0?.menuInflater
@@ -198,4 +189,12 @@ class FilmListActivity : AppCompatActivity() {
             }
         )
     }
+
+    fun notifyItemInserted(){
+        if(resources.getBoolean(R.bool.use_recycled_view))
+            bindingRecycled.list.adapter?.notifyItemInserted(FilmDataSource.films.size - 1)
+        else
+            (listAdapter as CustomAdapter).notifyDataSetChanged()
+    }
+
 }
