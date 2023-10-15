@@ -3,8 +3,10 @@ package es.ua.eps.filmoteca.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.FrameLayout
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityMainBinding
@@ -13,15 +15,22 @@ import es.ua.eps.filmoteca.fragment.FilmDataFragment
 import es.ua.eps.filmoteca.fragment.FilmListFragment
 
 class MainActivity : AppCompatActivity(),
-            FilmListFragment.OnItemSelectedListener {
+            FilmListFragment.OnItemSelectedListener,
+            FilmListFragment.OnDeleteItemListener,
+            FilmDataFragment.OnDataEditListener,
+            FilmDataFragment.OnReturnListener,
+            FilmDataFragment.OnDataLayoutChangeListener{
 
     companion object {
-        private val ID_ADD_FILM = Menu.FIRST
-        private val ID_ABOUT = Menu.FIRST + 1
-        private val ID_GROUP = Menu.FIRST
+        const val ID_ADD_FILM = Menu.FIRST
+        const val ID_ABOUT = Menu.FIRST + 1
+        const val ID_GROUP = Menu.FIRST
+        const val INTENT_FILM_POSITION = "INTENT_FILM_POSITION"
     }
 
     private lateinit var mainBinding : ActivityMainBinding
+
+    private var intentFilmPosition : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +41,15 @@ class MainActivity : AppCompatActivity(),
 
         if(mainBinding.fragmentContainer != null && savedInstanceState == null)
             initDynamicFragment()
+        else if(mainBinding.fragmentContainer == null){
+            
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        if (intentFilmPosition != null)
+            outState.putInt(INTENT_FILM_POSITION, intentFilmPosition!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -54,6 +72,7 @@ class MainActivity : AppCompatActivity(),
                 val listFragment = supportFragmentManager.findFragmentById(R.id.list_fragment) as FilmListFragment
                 listFragment.notifyItemInserted()
             }
+            android.R.id.home -> toListFragment()
         }
 
         return false
@@ -68,10 +87,19 @@ class MainActivity : AppCompatActivity(),
     override fun onItemSelected(position: Int) {
 
         var dataFragment = supportFragmentManager.findFragmentById(R.id.data_fragment) as? FilmDataFragment
+        intentFilmPosition = position
 
-        if (dataFragment != null) {
-            dataFragment.updateInterfaceByPositionId(position)
+        if (findViewById<FrameLayout>(R.id.fragment_container) == null) {
+
+            supportActionBar?.setHomeButtonEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+            dataFragment?.updateInterfaceByPositionId(position)
+
         } else {
+
+            supportActionBar?.setHomeButtonEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
             dataFragment = FilmDataFragment()
             val args = Bundle()
@@ -81,6 +109,44 @@ class MainActivity : AppCompatActivity(),
             val t = supportFragmentManager.beginTransaction()
             t.replace(R.id.fragment_container, dataFragment)
             t.addToBackStack(null)
+            t.commit()
+
+        }
+    }
+
+    override fun onReturn() {
+        toListFragment()
+    }
+
+    override fun onDeleteItem() {
+        val dataFragment = supportFragmentManager.findFragmentById(R.id.data_fragment) as? FilmDataFragment
+        dataFragment?.updateInterface(FilmDataSource.getFilmByTitle(dataFragment.getActualFilmTitle()))
+    }
+
+    override fun onDataLayoutChange() {
+        if(findViewById<FrameLayout>(R.id.fragment_container) != null) {
+            supportActionBar?.setHomeButtonEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onDataEdit(position: Int) {
+        val listFragment = supportFragmentManager.findFragmentById(R.id.list_fragment) as? FilmListFragment
+        listFragment?.notifyItemModified(position)
+    }
+
+    private fun toListFragment(){
+
+        if(findViewById<FrameLayout>(R.id.fragment_container) != null) {
+
+            supportActionBar?.setHomeButtonEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+            supportFragmentManager.popBackStack()
+
+            val listFragment = FilmListFragment()
+            val t = supportFragmentManager.beginTransaction()
+            t.replace(R.id.fragment_container, listFragment)
             t.commit()
         }
     }

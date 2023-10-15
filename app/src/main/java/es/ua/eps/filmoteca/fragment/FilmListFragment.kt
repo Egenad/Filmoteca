@@ -1,7 +1,6 @@
 package es.ua.eps.filmoteca.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,6 +32,7 @@ class FilmListFragment : ListFragment() {
     private var customCallback : CustomAMCallback = CustomAMCallback()
 
     private var callback: OnItemSelectedListener? = null
+    private var callbackDelete: OnDeleteItemListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,9 +41,9 @@ class FilmListFragment : ListFragment() {
     ): View {
 
         if(resources.getBoolean(R.bool.use_recycled_view))
-            return createRecycledView()
+            return createRecycledView(container)
 
-        return createListView()
+        return createListView(container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,9 +60,9 @@ class FilmListFragment : ListFragment() {
             createListViewListeners()
     }
 
-    private fun createRecycledView() : View{
+    private fun createRecycledView(container: ViewGroup?) : View{
 
-        bindingRecycled = ActivityFilmListRecycledBinding.inflate(layoutInflater)
+        bindingRecycled = ActivityFilmListRecycledBinding.inflate(layoutInflater, container, false)
 
         registerForContextMenu(bindingRecycled.list)
 
@@ -74,9 +74,9 @@ class FilmListFragment : ListFragment() {
         return bindingRecycled.list
     }
 
-    private fun createListView() : View{
+    private fun createListView(container: ViewGroup?) : View{
 
-        binding = ActivityFilmListBinding.inflate(layoutInflater)
+        binding = ActivityFilmListBinding.inflate(layoutInflater, container, false)
 
         registerForContextMenu(binding.list)
 
@@ -95,16 +95,10 @@ class FilmListFragment : ListFragment() {
         recyclerAdapter.setOnItemClickListener {
                 filmPosition ->
             run {
-                if (customCallback.actionMode != null) {
-                    // MULTIPLE SELECTION
-                    customCallback.actionItemClicked(filmPosition)
-
-                } else {
-                    /*startActivity(
-                        Intent(activity, FilmDataActivity::class.java)
-                            .putExtra(EXTRA_FILM_POSITION, filmPosition)
-                    )*/
-                }
+                if (customCallback.actionMode != null)
+                    customCallback.actionItemClicked(filmPosition) // MULTIPLE SELECTION
+                else
+                    callback?.onItemSelected(filmPosition)
             }
         }
 
@@ -123,13 +117,24 @@ class FilmListFragment : ListFragment() {
         fun onItemSelected(position: Int)
     }
 
+    interface OnDeleteItemListener {
+        fun onDeleteItem()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callback = try {
             context as OnItemSelectedListener
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString()
-                    + " debe implementar OnItemSelectedListener")
+                    + " must implement OnItemSelectedListener")
+        }
+
+        callbackDelete = try {
+            context as OnDeleteItemListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString()
+                    + " must implement OnDeleteItemListener")
         }
     }
 
@@ -166,6 +171,7 @@ class FilmListFragment : ListFragment() {
                             val customAdapter = binding.list.adapter as CustomAdapter
                             customAdapter.notifyDataSetChanged()
                             setTitle(p0, 0)
+                            callbackDelete?.onDeleteItem()
                             true
                         }
                         else -> false
@@ -201,6 +207,13 @@ class FilmListFragment : ListFragment() {
     fun notifyItemInserted(){
         if(resources.getBoolean(R.bool.use_recycled_view))
             bindingRecycled.list.adapter?.notifyItemInserted(FilmDataSource.films.size - 1)
+        else
+            (listAdapter as CustomAdapter).notifyDataSetChanged()
+    }
+
+    fun notifyItemModified(position: Int){
+        if(resources.getBoolean(R.bool.use_recycled_view))
+            bindingRecycled.list.adapter?.notifyItemChanged(position)
         else
             (listAdapter as CustomAdapter).notifyDataSetChanged()
     }

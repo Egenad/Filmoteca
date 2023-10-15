@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -18,7 +17,6 @@ import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.activity.FilmEditActivity
-import es.ua.eps.filmoteca.activity.MainActivity
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
 const val EXTRA_FILM_POSITION = "EXTRA_FILM_POSITION"
@@ -27,6 +25,12 @@ class FilmDataFragment : Fragment() {
 
     private lateinit var binding : ActivityFilmDataBinding
     private val MOVIE_RESULT = 1
+
+    private var callback: OnReturnListener? = null
+    private var callbackAppBar: OnDataLayoutChangeListener? = null
+    private var callbackDataEdit: OnDataEditListener? = null
+
+    private var selectedFilmPosition : Int? = null
 
     private val startForResult =
         registerForActivityResult(
@@ -39,13 +43,15 @@ class FilmDataFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = ActivityFilmDataBinding.inflate(layoutInflater)
+        binding = ActivityFilmDataBinding.inflate(layoutInflater, container, false)
 
         return binding.root
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if(selectedFilmPosition != null)
+            outState.putInt(EXTRA_FILM_POSITION, selectedFilmPosition!!)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,9 +60,12 @@ class FilmDataFragment : Fragment() {
         binding.filmEdit.setOnClickListener {
 
             val editIntent = Intent(activity, FilmEditActivity::class.java)
-                .putExtra(EXTRA_FILM_POSITION, activity?.intent?.getIntExtra(EXTRA_FILM_POSITION, 0))
+                .putExtra(
+                    EXTRA_FILM_POSITION,
+                    (arguments?.getInt(EXTRA_FILM_POSITION, 0) ?: selectedFilmPosition ?: 0)
+                )
 
-            if(Build.VERSION.SDK_INT >= 30)
+            if (Build.VERSION.SDK_INT >= 30)
                 startForResult.launch(editIntent)
             else
                 @Suppress("DEPRECATION")
@@ -65,7 +74,9 @@ class FilmDataFragment : Fragment() {
 
         binding.filmReturn?.setOnClickListener { returnButton() }
 
-        updateInterfaceByPositionId(arguments?.getInt(EXTRA_FILM_POSITION, 0)!!)
+        selectedFilmPosition = savedInstanceState?.getInt(EXTRA_FILM_POSITION) ?: (arguments?.getInt(EXTRA_FILM_POSITION, 0)?: 0)
+        updateInterfaceByPositionId(selectedFilmPosition)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -75,23 +86,30 @@ class FilmDataFragment : Fragment() {
         if (requestCode == MOVIE_RESULT)
             if (resultCode == Activity.RESULT_OK) {
                 // Update interface with new values
-                updateInterface(
-                    FilmDataSource.films[activity?.intent?.getIntExtra(
-                        EXTRA_FILM_POSITION,
-                        0
-                    )!!]
-                )
+                if(arguments?.getInt(EXTRA_FILM_POSITION, 0) != null || selectedFilmPosition != null) {
+
+                    val position : Int = arguments?.getInt(EXTRA_FILM_POSITION, 0)
+                        ?: selectedFilmPosition ?: 0
+
+                    updateInterface(FilmDataSource.films[position])
+                    callbackDataEdit?.onDataEdit(position)
+                }
                 Toast.makeText(activity, R.string.film_edit_result_ok, Toast.LENGTH_SHORT).show()
             } else if (resultCode == Activity.RESULT_CANCELED)
                 Toast.makeText(activity, R.string.film_edit_result_cancelled, Toast.LENGTH_SHORT).show()
     }
 
-    fun updateInterfaceByPositionId(position: Int){
-        if(FilmDataSource.films.size > position)
-            updateInterface(FilmDataSource.films[position])
+    fun updateInterfaceByPositionId(position: Int?){
+
+        callbackAppBar?.onDataLayoutChange()
+
+        if(FilmDataSource.films.size > (position ?: 0)) {
+            updateInterface(FilmDataSource.films[position ?: 0])
+            selectedFilmPosition = position
+        }
     }
 
-    private fun updateInterface(selectedFilm: Film){
+    fun updateInterface(selectedFilm: Film){
 
         val nullValue = resources.getString(R.string.nullValue)
 
@@ -111,7 +129,7 @@ class FilmDataFragment : Fragment() {
 
         val genreType = "$format, $genre"
 
-        binding.filmTypeGenere.text = genreType
+        binding.filmTypeGenre.text = genreType
 
         binding.filmImdb.setOnClickListener{
             val imdbPageIntent = Intent(Intent.ACTION_VIEW,
@@ -122,19 +140,48 @@ class FilmDataFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-
-        when(item.itemId){
-            android.R.id.home -> returnButton()
-        }
-
-        return false
+    private fun returnButton(){
+        callback?.onReturn()
     }
 
-    private fun returnButton(){
-        startActivity(Intent(activity, MainActivity::class.java)
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    interface OnReturnListener {
+        fun onReturn()
+    }
+
+    interface OnDataLayoutChangeListener {
+        fun onDataLayoutChange()
+    }
+
+    interface OnDataEditListener {
+        fun onDataEdit(position: Int)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callback = try {
+            context as OnReturnListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString()
+                    + " must implement OnReturnListener")
+        }
+
+        callbackAppBar = try {
+            context as OnDataLayoutChangeListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString()
+                    + " must implement OnLayoutChangeListener")
+        }
+
+        callbackDataEdit = try {
+            context as OnDataEditListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString()
+                    + " must implement OnDataEditListener")
+        }
+    }
+
+    fun getActualFilmTitle() : String{
+        return binding.filmData.text.toString()
     }
 
 }

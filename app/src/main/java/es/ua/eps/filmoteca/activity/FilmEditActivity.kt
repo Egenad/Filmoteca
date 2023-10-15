@@ -126,13 +126,13 @@ class FilmEditActivity : AppCompatActivity() {
 
     private fun updateEditHud(selectedFilm: Film){
         binding.imageView.setImageResource(selectedFilm.imageResId)
-        binding.filmEditTitle?.setText(selectedFilm.title?: "")
-        binding.filmEditDirector?.setText(selectedFilm.director?: "")
-        binding.filmEditYear?.setText(selectedFilm.year.toString())
-        binding.filmEditImdb?.setText(selectedFilm.imdbUrl?: "")
-        binding.filmEditComments?.setText(selectedFilm.comments?: "")
-        binding.filmEditGenre?.setSelection(selectedFilm.genre)
-        binding.filmEditFormat?.setSelection(selectedFilm.format)
+        binding.filmEditTitle.setText(selectedFilm.title?: "")
+        binding.filmEditDirector.setText(selectedFilm.director?: "")
+        binding.filmEditYear.setText(selectedFilm.year.toString())
+        binding.filmEditImdb.setText(selectedFilm.imdbUrl?: "")
+        binding.filmEditComments.setText(selectedFilm.comments?: "")
+        binding.filmEditGenre.setSelection(selectedFilm.genre)
+        binding.filmEditFormat.setSelection(selectedFilm.format)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -59,6 +59,10 @@ object FilmDataSource {
     }
 
     fun addDefaultFilm(){
+        films.add(getDefaultFilm())
+    }
+
+    fun getDefaultFilm() : Film{
 
         val resources = ContextBuilder.getContext().resources
 
@@ -71,7 +75,7 @@ object FilmDataSource {
         f.genre = Film.GENRE_SCIFI
         f.imdbUrl = resources.getString(R.string.film_default_imdb)
         f.year = 2000
-        films.add(f)
+        return f
     }
 
     fun selectAllItems(selection : Boolean){
@@ -102,5 +106,24 @@ object FilmDataSource {
         }
 
         films.removeAll(newFilmList)
+    }
+
+    fun getFilmByTitle(title: String) : Film{
+
+        var result : Film = getDefaultFilm()
+
+        if(films.isNotEmpty()) {
+            var found = false;
+            for (film in films) {
+                if (film.title.equals(title)) {
+                    result = film
+                    found = true
+                }
+            }
+
+            if(!found) result = films[0]
+        }
+
+        return result
     }
 }
