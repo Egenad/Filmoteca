@@ -39,11 +39,9 @@ class MainActivity : AppCompatActivity(),
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includeAppbar.toolbar)
 
-        if(mainBinding.fragmentContainer != null && savedInstanceState == null)
+        if((mainBinding.fragmentContainer != null && savedInstanceState == null) || mainBinding.fragmentContainer != null)
             initDynamicFragment()
-        else if(mainBinding.fragmentContainer == null){
-            
-        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
