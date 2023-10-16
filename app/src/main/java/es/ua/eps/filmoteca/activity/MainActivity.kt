@@ -3,7 +3,6 @@ package es.ua.eps.filmoteca.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.FrameLayout
@@ -25,12 +24,9 @@ class MainActivity : AppCompatActivity(),
         const val ID_ADD_FILM = Menu.FIRST
         const val ID_ABOUT = Menu.FIRST + 1
         const val ID_GROUP = Menu.FIRST
-        const val INTENT_FILM_POSITION = "INTENT_FILM_POSITION"
     }
 
     private lateinit var mainBinding : ActivityMainBinding
-
-    private var intentFilmPosition : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +38,6 @@ class MainActivity : AppCompatActivity(),
         if((mainBinding.fragmentContainer != null && savedInstanceState == null) || mainBinding.fragmentContainer != null)
             initDynamicFragment()
 
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        if (intentFilmPosition != null)
-            outState.putInt(INTENT_FILM_POSITION, intentFilmPosition!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -85,7 +75,6 @@ class MainActivity : AppCompatActivity(),
     override fun onItemSelected(position: Int) {
 
         var dataFragment = supportFragmentManager.findFragmentById(R.id.data_fragment) as? FilmDataFragment
-        intentFilmPosition = position
 
         if (findViewById<FrameLayout>(R.id.fragment_container) == null) {
 
