@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,7 +28,6 @@ class FilmDataFragment : Fragment() {
     private val MOVIE_RESULT = 1
 
     private var callback: OnReturnListener? = null
-    private var callbackAppBar: OnDataLayoutChangeListener? = null
     private var callbackDataEdit: OnDataEditListener? = null
 
     private var selectedFilmPosition : Int? = null
@@ -74,7 +74,12 @@ class FilmDataFragment : Fragment() {
 
         binding.filmReturn?.setOnClickListener { returnButton() }
 
-        selectedFilmPosition = savedInstanceState?.getInt(EXTRA_FILM_POSITION) ?: (arguments?.getInt(EXTRA_FILM_POSITION, 0)?: 0)
+        selectedFilmPosition =
+            savedInstanceState?.getInt(EXTRA_FILM_POSITION) ?: (arguments?.getInt(
+                EXTRA_FILM_POSITION,
+                0
+            ) ?: 0)
+
         updateInterfaceByPositionId(selectedFilmPosition)
 
     }
@@ -100,8 +105,6 @@ class FilmDataFragment : Fragment() {
     }
 
     fun updateInterfaceByPositionId(position: Int?){
-
-        callbackAppBar?.onDataLayoutChange()
 
         if(FilmDataSource.films.size > (position ?: 0)) {
             updateInterface(FilmDataSource.films[position ?: 0])
@@ -138,6 +141,10 @@ class FilmDataFragment : Fragment() {
                 startActivity(imdbPageIntent)
             }
         }
+
+        val enabled = FilmDataSource.films.isNotEmpty()
+        binding.filmEdit.isEnabled = enabled
+        binding.filmImdb.isEnabled = enabled
     }
 
     private fun returnButton(){
@@ -146,10 +153,6 @@ class FilmDataFragment : Fragment() {
 
     interface OnReturnListener {
         fun onReturn()
-    }
-
-    interface OnDataLayoutChangeListener {
-        fun onDataLayoutChange()
     }
 
     interface OnDataEditListener {
@@ -163,13 +166,6 @@ class FilmDataFragment : Fragment() {
         } catch (e: ClassCastException) {
             throw ClassCastException(context.toString()
                     + " must implement OnReturnListener")
-        }
-
-        callbackAppBar = try {
-            context as OnDataLayoutChangeListener
-        } catch (e: ClassCastException) {
-            throw ClassCastException(context.toString()
-                    + " must implement OnLayoutChangeListener")
         }
 
         callbackDataEdit = try {

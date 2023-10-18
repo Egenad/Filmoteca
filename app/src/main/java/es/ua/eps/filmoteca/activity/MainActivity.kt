@@ -17,8 +17,7 @@ class MainActivity : AppCompatActivity(),
             FilmListFragment.OnItemSelectedListener,
             FilmListFragment.OnDeleteItemListener,
             FilmDataFragment.OnDataEditListener,
-            FilmDataFragment.OnReturnListener,
-            FilmDataFragment.OnDataLayoutChangeListener{
+            FilmDataFragment.OnReturnListener{
 
     companion object {
         const val ID_ADD_FILM = Menu.FIRST
@@ -35,9 +34,11 @@ class MainActivity : AppCompatActivity(),
         setContentView(mainBinding.root)
         setSupportActionBar(mainBinding.includeAppbar.toolbar)
 
-        if((mainBinding.fragmentContainer != null && savedInstanceState == null) || mainBinding.fragmentContainer != null)
-            initDynamicFragment()
-
+        if(mainBinding.fragmentContainer != null)
+            if(savedInstanceState == null)
+                initDynamicFragment()
+            else
+                toListFragment()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -57,8 +58,11 @@ class MainActivity : AppCompatActivity(),
             ID_ADD_FILM ->{
                 FilmDataSource.addDefaultFilm()
 
-                val listFragment = supportFragmentManager.findFragmentById(R.id.list_fragment) as FilmListFragment
-                listFragment.notifyItemInserted()
+                val listFragmentStatic = supportFragmentManager.findFragmentById(R.id.list_fragment) as? FilmListFragment
+                val listFragmentDynamic = supportFragmentManager.findFragmentById(R.id.fragment_container) as? FilmListFragment
+
+                listFragmentStatic?.notifyItemInserted()
+                listFragmentDynamic?.notifyItemInserted()
             }
             android.R.id.home -> toListFragment()
         }
@@ -108,13 +112,6 @@ class MainActivity : AppCompatActivity(),
     override fun onDeleteItem() {
         val dataFragment = supportFragmentManager.findFragmentById(R.id.data_fragment) as? FilmDataFragment
         dataFragment?.updateInterface(FilmDataSource.getFilmByTitle(dataFragment.getActualFilmTitle()))
-    }
-
-    override fun onDataLayoutChange() {
-        if(findViewById<FrameLayout>(R.id.fragment_container) != null) {
-            supportActionBar?.setHomeButtonEnabled(true)
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        }
     }
 
     override fun onDataEdit(position: Int) {

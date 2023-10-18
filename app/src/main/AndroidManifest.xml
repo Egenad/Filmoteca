@@ -45,9 +45,6 @@
             android:name=".activity.FilmEditActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.FilmDataActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.AboutActivity"
             android:exported="false" />
     </application>
