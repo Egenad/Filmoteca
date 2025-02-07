@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="genre_options">
+        <item>@string/film_genre_0</item>
+        <item>@string/film_genre_1</item>
+        <item>@string/film_genre_2</item>
+        <item>@string/film_genre_3</item>
+        <item>@string/film_genre_4</item>
+        <item>@string/film_genre_5</item>
+    </string-array>
+
+    <string-array name="format_options">
+        <item>@string/film_format_0</item>
+        <item>@string/film_format_1</item>
+        <item>@string/film_format_2</item>
+    </string-array>
+</resources>

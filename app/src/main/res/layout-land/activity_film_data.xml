@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp" >
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="280dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="16dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/imageDescription"
+            app:srcCompat="@drawable/back_to_future" />
+
+        <TextView
+            android:id="@+id/film_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:text="@string/film_data" />
+
+        <TextView
+            android:id="@+id/film_director_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/film_data"
+            android:layout_below="@id/film_data"
+            android:text="@string/film_director_header" />
+
+        <TextView
+            android:id="@+id/film_director_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/film_data"
+            android:layout_below="@id/film_director_header"
+            android:text="@string/film_rf_director" />
+
+        <TextView
+            android:id="@+id/film_year_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/film_data"
+            android:layout_below="@id/film_director_value"
+            android:text="@string/film_year_header" />
+
+        <TextView
+            android:id="@+id/film_year_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/film_data"
+            android:layout_below="@id/film_year_header"
+            android:text="@string/film_year_value" />
+
+        <TextView
+            android:id="@+id/film_type_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/film_data"
+            android:layout_below="@id/film_year_value"
+            android:text="@string/film_format_0" />
+
+        <Button
+            android:id="@+id/film_imdb"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/film_type_genre"
+            android:layout_marginTop="16dp"
+            android:layout_alignEnd="@id/film_data"
+            android:text="@string/film_imdb" />
+
+        <TextView
+            android:id="@+id/extended_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imageView"
+            android:layout_alignStart="@+id/imageView"
+            android:text="@string/extended_version" />
+
+        <TextView
+            android:id="@+id/centerPoint"
+            android:text=""
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/extended_version"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/film_edit"
+            android:text="@string/film_edit"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/extended_version"
+            android:layout_toEndOf="@+id/centerPoint" />
+    </RelativeLayout>
+</ScrollView>

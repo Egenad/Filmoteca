@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Filmoteca</string>
-    <string name="functionality">Functionality not implemented</string>
+    <string name="film_data"><b>Film information</b></string>
+    <string name="film_imdb"><b>WATCH IN IMDB</b></string>
+    <string name="film_edit">Edit film</string>
+    <string name="film_return">Return to principal</string>
+    <string name="film_editing">Editing film</string>
+    <string name="film_edit_result">Edited</string>
+    <string name="film_edit_result_ok">Edited correctly</string>
+    <string name="film_edit_result_cancelled">Canceled edition</string>
+    <string name="film_year_header"><i>Year:</i></string>
+    <string name="extended_version">Extended version</string>
+    <string name="film_genre_0">Action</string>
+    <string name="film_genre_1">Comedy</string>
+    <string name="film_genre_5">Fantasy</string>
+
+    <!-- ABOUT -->
     <string name="developed_by">Created by Angel Terol</string>
     <string name="to_webpage">Go to webpage</string>
     <string name="support">Obtain support</string>
     <string name="back">Return</string>
+
+    <!-- FILM LIST -->
+    <string name="imageDescription">Film poster</string>
+    <string name="menu_about">About</string>
+    <string name="menu_add_film">Add Film</string>
+    <string name="delete_films">Delete Films</string>
+    <string name="films_selected">selected</string>
+
+    <!-- FILM DATA -->
+    <string name="film_rf_name">Back to the future</string>
+    <string name="film_h1_name">Harry Potter and the Philosopher´s Stone</string>
+    <string name="film_h2_name">Harry Potter and the Chamber of Secrets</string>
+    <string name="film_ij_name">Indiana Jones: Raiders of the Lost Ark</string>
+
+    <!-- FILM EDIT -->
+    <string name="film_photo">TAKE SCREENSHOT</string>
+    <string name="film_select_image">SELECT IMAGE</string>
+    <string name="film_save">SAVE</string>
+    <string name="film_cancel">Cancel</string>
+    <string name="film_edit_title">Title of the film</string>
+    <string name="film_edit_director">Director´s name</string>
+    <string name="film_edit_year">Year</string>
+    <string name="film_edit_imdb">Link to IMDB</string>
+    <string name="film_edit_comments">Comments</string>
+    <string name="film_default_title">Default Name</string>
+    <string name="film_default_director">Default Director´s Name</string>
+
+    <!-- ERROR -->
+
+    <string name="error_open_camera">ERROR: Unable to open phone camera</string>
+    <string name="error_take_photo">ERROR: The photo couldn´t be saved</string>
+
 </resources>
