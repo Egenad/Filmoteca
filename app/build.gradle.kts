@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "es.ua.eps.filmoteca"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "es.ua.eps.filmoteca"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
