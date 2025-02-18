@@ -15,6 +15,9 @@
     <string name="film_genre_1">Comedy</string>
     <string name="film_genre_5">Fantasy</string>
 
+    <!-- LOGIN -->
+    <string name="login_button">Sign in</string>
+
     <!-- ABOUT -->
     <string name="developed_by">Created by Angel Terol</string>
     <string name="to_webpage">Go to webpage</string>

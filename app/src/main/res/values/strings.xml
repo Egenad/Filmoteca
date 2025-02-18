@@ -5,6 +5,9 @@
     <string name="film_edit_result_cancelled">Edición cancelada</string>
     <string name="nullValue" translatable="false">Default/Null</string>
 
+    <!-- LOGIN -->
+    <string name="login_button">Iniciar sesión</string>
+
     <!-- ABOUT -->
     <string name="developed_by">Creada por Angel Terol</string>
     <string name="to_webpage">Ir al sitio web</string>
@@ -65,7 +68,6 @@
 
     <string name="error_open_camera">ERROR: No se ha podido abrir la cámara</string>
     <string name="error_take_photo">ERROR: No se ha podido guardar la fotografía</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
 </resources>
