@@ -4,7 +4,7 @@
     <string name="film_edit_result_ok">Editado correctamente</string>
     <string name="film_edit_result_cancelled">Edición cancelada</string>
     <string name="nullValue" translatable="false">Default/Null</string>
-
+    <string name="google_cloud_client_id" translatable="false">13801236933-p9q7ceh6o576pan3ij2bnupcgd2j5bn1.apps.googleusercontent.com</string>
     <!-- LOGIN -->
     <string name="login_button">Iniciar sesión</string>
 

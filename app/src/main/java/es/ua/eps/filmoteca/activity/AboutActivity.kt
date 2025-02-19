@@ -45,8 +45,11 @@ class AboutActivity : AppCompatActivity() {
                 .into(binding.iconImage)
         }
 
-        if(UserData.userName != null)
+        if(UserData.userName != null) {
             binding.textView.text = UserData.userName
+            binding.idText.text = UserData.userId
+            binding.idEmail.text = UserData.userEmail
+        }
 
         binding.back.setOnClickListener{ returnButton() }
     }

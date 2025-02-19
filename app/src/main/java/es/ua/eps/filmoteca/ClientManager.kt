@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.credentials.GetCredentialException
+import android.net.Uri
 import android.os.Build
+import android.util.Base64
 import android.util.Log
+import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -20,19 +23,28 @@ import es.ua.eps.filmoteca.persistence.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
-const val USER_NAME = "user_name"
-const val USER_PHOTO_URL = "user_photo_url"
 
-class ClientManager(private var context: Context) {
+const val USER_NAME         = "user_name"
+const val USER_PHOTO_URL    = "user_photo_url"
+const val USER_EMAIL        = "user_email"
+const val USER_ID           = "user_id"
 
-    private var credentialManager: CredentialManager = CredentialManager.create(context)
+object ClientManager {
 
-    fun startGoogleSignInFlow() {
+    private lateinit var appContext: Context
+    private lateinit var credentialManager: CredentialManager
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+        credentialManager = CredentialManager.create(appContext)
+    }
+    fun startGoogleSignInFlow(activityContext: Context) {
+
         CoroutineScope(Dispatchers.Main).launch {
 
-            val googleSignInOption = GetSignInWithGoogleOption
-                .Builder("13801236933-p9q7ceh6o576pan3ij2bnupcgd2j5bn1.apps.googleusercontent.com") // Web type client Id
+            val googleSignInOption = GetSignInWithGoogleOption.Builder(appContext.getString(R.string.google_cloud_client_id))
                 .build()
 
             val credentialRequest = GetCredentialRequest
@@ -47,7 +59,7 @@ class ClientManager(private var context: Context) {
             }
 
             if (response != null) {
-                handleGoogleCredential(response)
+                handleGoogleCredential(response, activityContext)
             }
         }
     }
@@ -59,7 +71,7 @@ class ClientManager(private var context: Context) {
         var response: GetCredentialResponse? = null
         try {
             response = credentialManager.getCredential(
-                context = context,
+                context = appContext,
                 request = credentialRequest
             )
         } catch (@SuppressLint("NewApi") e: GetCredentialException) {
@@ -77,7 +89,7 @@ class ClientManager(private var context: Context) {
         var response: GetCredentialResponse? = null
         try {
             response = credentialManager.getCredential(
-                context = context,
+                context = appContext,
                 request = credentialRequest
             )
         } catch (e: Exception) {
@@ -86,7 +98,7 @@ class ClientManager(private var context: Context) {
         return response
     }
 
-    private fun handleGoogleCredential(response: GetCredentialResponse) {
+    private fun handleGoogleCredential(response: GetCredentialResponse, activityContext: Context) {
 
         when(val credential = response.credential) {
             is CustomCredential -> {
@@ -97,7 +109,7 @@ class ClientManager(private var context: Context) {
 
                         handleAccount(googleIdTokenCredential)
 
-                        context.startActivity(Intent(context, MainActivity::class.java))
+                        activityContext.startActivity(Intent(activityContext, MainActivity::class.java))
 
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e("Google", "Received an invalid google id token response", e)
@@ -112,9 +124,90 @@ class ClientManager(private var context: Context) {
 
     private fun handleAccount(token: GoogleIdTokenCredential?) {
         if (token != null) {
-            UserData.signIn(context, token)
+            signIn(appContext, token)
         } else {
             Log.d("GoogleSignIn", "No se pudo obtener la cuenta")
         }
+    }
+
+    fun signOut(context: Context){
+        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
+        sharedPreferences.edit()
+            .remove(USER_NAME)
+            .remove(USER_PHOTO_URL)
+            .remove(USER_ID)
+            .remove(USER_EMAIL)
+            .apply()
+
+        UserData.clear()
+
+    }
+
+    fun signIn(context: Context, token: GoogleIdTokenCredential){
+        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
+
+        val payload = decodeJwt(token.idToken)
+        val id = if(payload != null) payload["sub"].toString() else ""
+
+        sharedPreferences.edit()
+            .putString(USER_NAME, token.displayName)
+            .putString(USER_PHOTO_URL, token.profilePictureUri.toString())
+            .putString(USER_ID, id)
+            .putString(USER_EMAIL, token.id)
+            .apply()
+
+        UserData.userName = token.displayName
+        UserData.userPhotoUrl = token.profilePictureUri
+        UserData.userEmail = token.id
+        UserData.userId = id
+    }
+
+    fun userSignedIn(context: Context): Boolean{
+        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
+        val name = sharedPreferences.getString(USER_NAME, null)
+
+        if (name != null) {
+
+            UserData.userName = name
+
+            val photoUrl = sharedPreferences.getString(USER_PHOTO_URL, null)
+            if(photoUrl != null)
+                UserData.userPhotoUrl = Uri.parse(photoUrl)
+
+            val id = sharedPreferences.getString(USER_ID, null)
+            if(id != null)
+                UserData.userId = id
+
+            val email = sharedPreferences.getString(USER_EMAIL, null)
+            if(email != null)
+                UserData.userEmail = email
+
+            return true
+        }
+
+        return false
+    }
+
+    fun decodeJwt(token: String): JSONObject? {
+        val parts = token.split(".")
+        return try {
+            val payload = String(Base64.decode(parts[1], Base64.URL_SAFE))
+            val json = JSONObject(payload)
+            json
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun disconnectAccount(activityContext: Context) {
+        signOut(activityContext)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            credentialManager.clearCredentialState(ClearCredentialStateRequest())
+        }
+
+        val logoutUrl = "https://accounts.google.com/logout"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(logoutUrl))
+        activityContext.startActivity(intent)
     }
 }

@@ -1,24 +1,23 @@
 package es.ua.eps.filmoteca
 
+import android.content.Context
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import es.ua.eps.filmoteca.adapter.RecycledAdapter
-import es.ua.eps.filmoteca.java.ContextBuilder
 
 class CustomAMCallback : ActionMode.Callback {
 
     var actionMode: ActionMode? = null
 
-    private val resources = ContextBuilder.getContext().resources
     private var adapter : RecycledAdapter? = null
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         val inflater = mode?.menuInflater
         inflater?.inflate(R.menu.contextual_menu, menu)
 
-        setTitle(1)
+        actionMode?.title = "1 item selected"
 
         return true
     }
@@ -33,7 +32,7 @@ class CustomAMCallback : ActionMode.Callback {
                 // Delete selected films
                 FilmDataSource.deleteSelectedFilms()
                 adapter?.notifyDataSetChanged()
-                setTitle(0)
+                actionMode?.title = "0 items selected"
                 true
             }
             else -> false
@@ -51,17 +50,17 @@ class CustomAMCallback : ActionMode.Callback {
         adapter = newAdapter
     }
 
-    fun actionItemClicked(position : Int){
+    fun actionItemClicked(position : Int, context: Context){
         if(position < FilmDataSource.films.size) {
             val film: Film = FilmDataSource.films[position]
             film.selected = !film.selected
-            setTitle(FilmDataSource.getSelectedFilmsCount())
+            setTitle(FilmDataSource.getSelectedFilmsCount(), context)
             adapter?.notifyItemChanged(position)
         }
     }
 
-    private fun setTitle(count : Int){
-        val title : String = count.toString() + " " + resources.getString(R.string.films_selected)
+    private fun setTitle(count : Int, context: Context){
+        val title : String = count.toString() + " " + context.getString(R.string.films_selected)
         actionMode?.title = title
     }
 

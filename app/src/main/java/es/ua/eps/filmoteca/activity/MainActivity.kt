@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.FrameLayout
+import com.google.android.gms.common.api.Api.Client
+import es.ua.eps.filmoteca.ClientManager
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityMainBinding
@@ -63,12 +65,17 @@ class MainActivity : AppCompatActivity(),
         when(item.itemId){
             ID_ABOUT -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
             ID_CLOSE_SESSION -> {
-                UserData.signOut(this)
+
+                ClientManager.signOut(this)
+
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
             }
             ID_DISCONNECT_ACCOUNT -> {
+                ClientManager.disconnectAccount(this)
 
+                /*startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                finish()*/
             }
             ID_ADD_FILM ->{
                 FilmDataSource.addDefaultFilm()

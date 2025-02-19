@@ -1,14 +1,19 @@
 package es.ua.eps.filmoteca
 
-import es.ua.eps.filmoteca.java.ContextBuilder
+import android.content.Context
+
 
 object FilmDataSource {
 
     val films: MutableList<Film> = mutableListOf()
 
-    init {
+    private lateinit var appContext: Context
 
-        val resources = ContextBuilder.getContext().resources
+    fun init(context: Context) {
+
+        appContext = context.applicationContext
+
+        val resources = appContext.resources
 
         // FILMS
 
@@ -64,7 +69,7 @@ object FilmDataSource {
 
     fun getDefaultFilm() : Film{
 
-        val resources = ContextBuilder.getContext().resources
+        val resources = appContext.resources
 
         val f = Film()
         f.title = resources.getString(R.string.film_default_title)

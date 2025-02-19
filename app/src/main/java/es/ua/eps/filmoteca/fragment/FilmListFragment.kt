@@ -96,7 +96,7 @@ class FilmListFragment : ListFragment() {
                 filmPosition ->
             run {
                 if (customCallback.actionMode != null)
-                    customCallback.actionItemClicked(filmPosition) // MULTIPLE SELECTION
+                    customCallback.actionItemClicked(filmPosition, requireContext()) // MULTIPLE SELECTION
                 else
                     callback?.onItemSelected(filmPosition)
             }
@@ -107,7 +107,7 @@ class FilmListFragment : ListFragment() {
                 false
             } else {
                 customCallback.startSupportActionMode((activity as AppCompatActivity?)!!, recyclerAdapter)
-                customCallback.actionItemClicked(it)
+                customCallback.actionItemClicked(it, requireContext())
                 true
             }
         }
