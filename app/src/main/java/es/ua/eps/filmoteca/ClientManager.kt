@@ -2,12 +2,19 @@ package es.ua.eps.filmoteca
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.credentials.GetCredentialException
 import android.os.Build
+import android.util.Log
 import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import es.ua.eps.filmoteca.activity.MainActivity
+import es.ua.eps.filmoteca.persistence.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +27,7 @@ class ClientManager(private var context: Context) {
         CoroutineScope(Dispatchers.Main).launch {
 
             val googleSignInOption = GetSignInWithGoogleOption
-                .Builder("13801236933-9l6mdg6uv5naqia3lvslij5eceo1s13b.apps.googleusercontent.com")
+                .Builder("13801236933-p9q7ceh6o576pan3ij2bnupcgd2j5bn1.apps.googleusercontent.com") // Web type client Id
                 .build()
 
             val credentialRequest = GetCredentialRequest
@@ -43,8 +50,7 @@ class ClientManager(private var context: Context) {
     private suspend fun getCredentialResponseAPI34(
         credentialManager: CredentialManager,
         credentialRequest: GetCredentialRequest
-    ):
-            GetCredentialResponse? {
+    ): GetCredentialResponse? {
         var response: GetCredentialResponse? = null
         try {
             response = credentialManager.getCredential(
@@ -76,8 +82,37 @@ class ClientManager(private var context: Context) {
     }
 
     private fun handleGoogleCredential(response: GetCredentialResponse) {
-        val googleCredential = response.credential
 
-        println(googleCredential)
+        when(val credential = response.credential) {
+            is CustomCredential -> {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    try {
+                        val googleIdTokenCredential = GoogleIdTokenCredential
+                            .createFrom(credential.data)
+
+                        handleAccount(googleIdTokenCredential)
+
+                        context.startActivity(Intent(context, MainActivity::class.java))
+
+                    } catch (e: GoogleIdTokenParsingException) {
+                        Log.e("Google", "Received an invalid google id token response", e)
+                    }
+                } else {
+                    // Catch any unrecognized custom credential type here.
+                    Log.e("Google", "Unexpected type of credential")
+                }
+            }
+        }
+    }
+
+    private fun handleAccount(token: GoogleIdTokenCredential?) {
+        if (token != null) {
+            UserData.userToken = token.idToken
+            UserData.userId = token.id
+            UserData.userName = token.displayName
+            UserData.userPhotoUrl = token.profilePictureUri
+        } else {
+            Log.d("GoogleSignIn", "No se pudo obtener la cuenta")
+        }
     }
 }

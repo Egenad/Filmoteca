@@ -5,8 +5,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import com.bumptech.glide.Glide
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityAboutBinding
+import es.ua.eps.filmoteca.persistence.UserData
 
 class AboutActivity : AppCompatActivity() {
 
@@ -36,6 +38,15 @@ class AboutActivity : AppCompatActivity() {
                 startActivity(emailIntent)
             }
         }
+
+        UserData.userPhotoUrl?.let { photoUrl ->
+            Glide.with(this)
+                .load(photoUrl)
+                .into(binding.iconImage)
+        }
+
+        if(UserData.userName != null)
+            binding.textView.text = UserData.userName
 
         binding.back.setOnClickListener{ returnButton() }
     }
