@@ -1,5 +1,7 @@
 package es.ua.eps.filmoteca.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +9,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import es.ua.eps.filmoteca.ClientManager
 import es.ua.eps.filmoteca.R
+import es.ua.eps.filmoteca.USER_NAME
+import es.ua.eps.filmoteca.USER_PHOTO_URL
 import es.ua.eps.filmoteca.databinding.ActivityLoginBinding
+import es.ua.eps.filmoteca.persistence.UserData
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,6 +37,12 @@ class LoginActivity : AppCompatActivity() {
 
         binding.signInButton.setOnClickListener {
             clientManager.startGoogleSignInFlow()
+        }
+
+        // Check if an user already singed in
+        if(UserData.userSignedIn(this)){
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 }

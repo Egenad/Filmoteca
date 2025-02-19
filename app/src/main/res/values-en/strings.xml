@@ -30,6 +30,8 @@
     <string name="menu_add_film">Add Film</string>
     <string name="delete_films">Delete Films</string>
     <string name="films_selected">selected</string>
+    <string name="menu_close_session">Close session</string>
+    <string name="menu_disconnect_account">Disconnect account</string>
 
     <!-- FILM DATA -->
     <string name="film_rf_name">Back to the future</string>

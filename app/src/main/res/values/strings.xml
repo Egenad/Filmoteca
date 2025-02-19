@@ -20,6 +20,8 @@
     <string name="menu_about">Acerca de</string>
     <string name="imageDescription">Póster de la película</string>
     <string name="menu_add_film">Añadir Película</string>
+    <string name="menu_close_session">Cerrar sesión</string>
+    <string name="menu_disconnect_account">Desconectar cuenta</string>
     <string name="delete_films">Eliminar Películas</string>
     <string name="films_selected">seleccionado/s</string>
 

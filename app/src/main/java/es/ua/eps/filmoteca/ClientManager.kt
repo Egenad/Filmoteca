@@ -2,6 +2,7 @@ package es.ua.eps.filmoteca
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.credentials.GetCredentialException
 import android.os.Build
@@ -14,10 +15,14 @@ import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import es.ua.eps.filmoteca.activity.MainActivity
+import es.ua.eps.filmoteca.activity.PREFERENCES_NAME
 import es.ua.eps.filmoteca.persistence.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+const val USER_NAME = "user_name"
+const val USER_PHOTO_URL = "user_photo_url"
 
 class ClientManager(private var context: Context) {
 
@@ -107,10 +112,7 @@ class ClientManager(private var context: Context) {
 
     private fun handleAccount(token: GoogleIdTokenCredential?) {
         if (token != null) {
-            UserData.userToken = token.idToken
-            UserData.userId = token.id
-            UserData.userName = token.displayName
-            UserData.userPhotoUrl = token.profilePictureUri
+            UserData.signIn(context, token)
         } else {
             Log.d("GoogleSignIn", "No se pudo obtener la cuenta")
         }

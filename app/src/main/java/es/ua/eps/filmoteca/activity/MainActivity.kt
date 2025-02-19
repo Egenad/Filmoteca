@@ -12,6 +12,9 @@ import es.ua.eps.filmoteca.databinding.ActivityMainBinding
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_POSITION
 import es.ua.eps.filmoteca.fragment.FilmDataFragment
 import es.ua.eps.filmoteca.fragment.FilmListFragment
+import es.ua.eps.filmoteca.persistence.UserData
+
+const val PREFERENCES_NAME = "FilmotecaPreferences"
 
 class MainActivity : AppCompatActivity(),
             FilmListFragment.OnItemSelectedListener,
@@ -21,7 +24,9 @@ class MainActivity : AppCompatActivity(),
 
     companion object {
         const val ID_ADD_FILM = Menu.FIRST
-        const val ID_ABOUT = Menu.FIRST + 1
+        const val ID_CLOSE_SESSION = Menu.FIRST + 1
+        const val ID_DISCONNECT_ACCOUNT = Menu.FIRST + 2
+        const val ID_ABOUT = Menu.FIRST + 3
         const val ID_GROUP = Menu.FIRST
     }
 
@@ -45,6 +50,8 @@ class MainActivity : AppCompatActivity(),
         super.onCreateOptionsMenu(menu)
 
         menu?.add(ID_GROUP, ID_ADD_FILM, Menu.NONE, resources.getString(R.string.menu_add_film))
+        menu?.add(ID_GROUP, ID_CLOSE_SESSION, Menu.NONE, resources.getString(R.string.menu_close_session))
+        menu?.add(ID_GROUP, ID_DISCONNECT_ACCOUNT, Menu.NONE, resources.getString(R.string.menu_disconnect_account))
         menu?.add(ID_GROUP, ID_ABOUT, Menu.NONE, resources.getString(R.string.menu_about))
 
         return true
@@ -55,6 +62,14 @@ class MainActivity : AppCompatActivity(),
 
         when(item.itemId){
             ID_ABOUT -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
+            ID_CLOSE_SESSION -> {
+                UserData.signOut(this)
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                finish()
+            }
+            ID_DISCONNECT_ACCOUNT -> {
+
+            }
             ID_ADD_FILM ->{
                 FilmDataSource.addDefaultFilm()
 
