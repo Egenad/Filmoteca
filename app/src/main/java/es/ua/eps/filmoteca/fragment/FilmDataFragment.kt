@@ -14,6 +14,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import coil.load
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
@@ -119,7 +120,12 @@ class FilmDataFragment : Fragment() {
         binding.filmData.text = selectedFilm.title?: nullValue
         binding.filmDirectorValue.text = selectedFilm.director?: nullValue
         binding.filmYearValue.text = selectedFilm.year.toString()
-        binding.imageView.setImageResource(selectedFilm.imageResId)
+
+        if(selectedFilm.imgUrl != null){
+            binding.imageView.load(selectedFilm.imgUrl)
+        }else{
+            binding.imageView.setImageResource(selectedFilm.imageResId)
+        }
 
         var genre = nullValue
         var format = nullValue

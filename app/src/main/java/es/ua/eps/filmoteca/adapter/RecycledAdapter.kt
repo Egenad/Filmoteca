@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.R
 
@@ -49,7 +50,16 @@ class RecycledAdapter(val filmList: List<Film>) :
         fun bind(it: Film) {
             name.text = it.title
             director.text = it.director
-            icon.setImageResource(it.imageResId)
+
+            if(it.imgUrl != null){
+                try{
+                    icon.load(it.imgUrl)
+                }catch (ex: Exception){
+                    ex.printStackTrace()
+                }
+            }else{
+                icon.setImageResource(it.imageResId)
+            }
 
             if(it.selected)
                 view.setBackgroundColor(Color.GRAY)

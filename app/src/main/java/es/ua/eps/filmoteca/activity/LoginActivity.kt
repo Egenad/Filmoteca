@@ -32,10 +32,5 @@ class LoginActivity : AppCompatActivity() {
             ClientManager.startGoogleSignInFlow(this)
         }
 
-        // Check if an user already singed in
-        /*if(clientManager.userSignedIn(this)){
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }*/
     }
 }

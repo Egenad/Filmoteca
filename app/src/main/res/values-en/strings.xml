@@ -57,4 +57,10 @@
     <string name="error_open_camera">ERROR: Unable to open phone camera</string>
     <string name="error_take_photo">ERROR: The photo couldn´t be saved</string>
 
+    <!-- FIRE CLOUD MESSAGING -->
+    <string name="permissions_needed">Permission needed</string>
+    <string name="permissions_ask">This app needs permissions to send notifications about important events. Do you want to grant it?</string>
+    <string name="accept">Accept</string>
+    <string name="no_thanks">No, thanks</string>
+
 </resources>

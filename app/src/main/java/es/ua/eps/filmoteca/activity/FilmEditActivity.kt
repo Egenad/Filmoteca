@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
@@ -125,7 +126,11 @@ class FilmEditActivity : AppCompatActivity() {
     }
 
     private fun updateEditHud(selectedFilm: Film){
-        binding.imageView.setImageResource(selectedFilm.imageResId)
+        if(selectedFilm.imgUrl != null){
+            binding.imageView.load(selectedFilm.imgUrl)
+        }else{
+            binding.imageView.setImageResource(selectedFilm.imageResId)
+        }
         binding.filmEditTitle.setText(selectedFilm.title?: "")
         binding.filmEditDirector.setText(selectedFilm.director?: "")
         binding.filmEditYear.setText(selectedFilm.year.toString())

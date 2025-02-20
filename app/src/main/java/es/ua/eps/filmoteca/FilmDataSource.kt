@@ -1,7 +1,7 @@
 package es.ua.eps.filmoteca
 
 import android.content.Context
-
+import es.ua.eps.filmoteca.service.FilmData
 
 object FilmDataSource {
 
@@ -130,5 +130,47 @@ object FilmDataSource {
         }
 
         return result
+    }
+
+    private fun filmExistsByTitle(title: String): Boolean {
+        return films.any { it.title == title }
+    }
+
+    fun addFireBaseMovie(movieData: FilmData){
+        // Check if it exists already
+        if(filmExistsByTitle(movieData.title ?: "")){
+            val film = getFilmByTitle(movieData.title ?: "")
+
+            if(movieData.director != null) film.director = movieData.director
+            if(movieData.comments != null) film.comments = movieData.comments
+            if(movieData.imdbUrl != null) film.imdbUrl = movieData.imdbUrl
+            if(movieData.imageUrl != null) film.imgUrl = movieData.imageUrl
+            if(movieData.year != null) film.year = Integer.valueOf(movieData.year ?: "0")
+            if(movieData.genre != null) film.genre = Integer.valueOf(movieData.genre ?: "0")
+            if(movieData.format != null) film.format = Integer.valueOf(movieData.format ?: "0")
+
+        }else{ // Add to data source
+            try {
+                val f = Film()
+                f.title = movieData.title
+                f.director = movieData.director
+                f.imageResId = R.string.film_default_title
+                f.imgUrl = movieData.imageUrl
+                f.comments = movieData.comments
+                f.format = Integer.valueOf(movieData.format ?: "0")
+                f.genre = Integer.valueOf(movieData.genre ?: "0")
+                f.imdbUrl = movieData.imdbUrl
+                f.year = Integer.valueOf(movieData.year ?: "0")
+                films.add(f)
+            }catch (ex: Exception){
+                ex.printStackTrace()
+            }
+        }
+    }
+
+    fun deleteFireBaseMovie(movieName: String){
+        getFilmByTitle(movieName).let {
+            films.remove(it)
+        }
     }
 }

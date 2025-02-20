@@ -1,6 +1,9 @@
 package es.ua.eps.filmoteca.fragment
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +15,7 @@ import android.widget.AbsListView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.ListFragment
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.ua.eps.filmoteca.CustomAMCallback
@@ -22,6 +26,7 @@ import es.ua.eps.filmoteca.adapter.CustomAdapter
 import es.ua.eps.filmoteca.adapter.RecycledAdapter
 import es.ua.eps.filmoteca.databinding.ActivityFilmListBinding
 import es.ua.eps.filmoteca.databinding.ActivityFilmListRecycledBinding
+import es.ua.eps.filmoteca.service.BROAD_CAST_FILM
 import java.lang.Exception
 
 class FilmListFragment : ListFragment() {
@@ -34,6 +39,15 @@ class FilmListFragment : ListFragment() {
     private var callback: OnItemSelectedListener? = null
     private var callbackDelete: OnDeleteItemListener? = null
 
+    private val filmReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if(resources.getBoolean(R.bool.use_recycled_view))
+                bindingRecycled.list.adapter?.notifyDataSetChanged()
+            else
+                (listAdapter as CustomAdapter).notifyDataSetChanged()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,7 +57,19 @@ class FilmListFragment : ListFragment() {
         if(resources.getBoolean(R.bool.use_recycled_view))
             return createRecycledView(container)
 
+        registerReceiver()
+
         return createListView(container)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(filmReceiver)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -216,6 +242,10 @@ class FilmListFragment : ListFragment() {
             bindingRecycled.list.adapter?.notifyItemChanged(position)
         else
             (listAdapter as CustomAdapter).notifyDataSetChanged()
+    }
+
+    private fun registerReceiver(){
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(filmReceiver, IntentFilter(BROAD_CAST_FILM))
     }
 
 }

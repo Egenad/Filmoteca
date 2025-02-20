@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import coil.load
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.R
 
@@ -21,14 +22,23 @@ class CustomAdapter(
         val view: View = convertView?: LayoutInflater.from(this.context)
             .inflate(R.layout.film_item, parent, false)
 
-        val name = view.findViewById(R.id.itemName) as TextView
-        val director = view.findViewById(R.id.itemDirector) as TextView
-        val icon = view.findViewById(R.id.itemPoster) as ImageView
+        val name: TextView      = view.findViewById(R.id.itemName)
+        val director: TextView  = view.findViewById(R.id.itemDirector)
+        val icon: ImageView     = view.findViewById(R.id.itemPoster)
 
         getItem(position)?.let {
             name.text = it.title
             director.text = it.director
-            icon.setImageResource(it.imageResId)
+
+            if(it.imgUrl != null){
+                try{
+                    icon.load(it.imgUrl)
+                }catch (ex: Exception){
+                    ex.printStackTrace()
+                }
+            }else{
+                icon.setImageResource(it.imageResId)
+            }
 
             if(it.selected)
                 view.setBackgroundColor(Color.GRAY)

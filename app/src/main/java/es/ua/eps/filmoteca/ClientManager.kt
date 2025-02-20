@@ -11,9 +11,11 @@ import android.util.Base64
 import android.util.Log
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
+import androidx.credentials.CredentialManagerCallback
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.ClearCredentialException
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -24,7 +26,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-
 
 const val USER_NAME         = "user_name"
 const val USER_PHOTO_URL    = "user_photo_url"
@@ -40,6 +41,11 @@ object ClientManager {
         appContext = context.applicationContext
         credentialManager = CredentialManager.create(appContext)
     }
+
+    fun getCredentialManager(): CredentialManager {
+        return credentialManager
+    }
+
     fun startGoogleSignInFlow(activityContext: Context) {
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -108,9 +114,7 @@ object ClientManager {
                             .createFrom(credential.data)
 
                         handleAccount(googleIdTokenCredential)
-
                         activityContext.startActivity(Intent(activityContext, MainActivity::class.java))
-
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e("Google", "Received an invalid google id token response", e)
                     }
@@ -130,62 +134,15 @@ object ClientManager {
         }
     }
 
-    fun signOut(context: Context){
-        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
-        sharedPreferences.edit()
-            .remove(USER_NAME)
-            .remove(USER_PHOTO_URL)
-            .remove(USER_ID)
-            .remove(USER_EMAIL)
-            .apply()
-
-        UserData.clear()
-
-    }
-
     fun signIn(context: Context, token: GoogleIdTokenCredential){
-        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
 
         val payload = decodeJwt(token.idToken)
         val id = if(payload != null) payload["sub"].toString() else ""
-
-        sharedPreferences.edit()
-            .putString(USER_NAME, token.displayName)
-            .putString(USER_PHOTO_URL, token.profilePictureUri.toString())
-            .putString(USER_ID, id)
-            .putString(USER_EMAIL, token.id)
-            .apply()
 
         UserData.userName = token.displayName
         UserData.userPhotoUrl = token.profilePictureUri
         UserData.userEmail = token.id
         UserData.userId = id
-    }
-
-    fun userSignedIn(context: Context): Boolean{
-        val sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
-        val name = sharedPreferences.getString(USER_NAME, null)
-
-        if (name != null) {
-
-            UserData.userName = name
-
-            val photoUrl = sharedPreferences.getString(USER_PHOTO_URL, null)
-            if(photoUrl != null)
-                UserData.userPhotoUrl = Uri.parse(photoUrl)
-
-            val id = sharedPreferences.getString(USER_ID, null)
-            if(id != null)
-                UserData.userId = id
-
-            val email = sharedPreferences.getString(USER_EMAIL, null)
-            if(email != null)
-                UserData.userEmail = email
-
-            return true
-        }
-
-        return false
     }
 
     fun decodeJwt(token: String): JSONObject? {
@@ -197,17 +154,5 @@ object ClientManager {
         } catch (e: Exception) {
             null
         }
-    }
-
-    fun disconnectAccount(activityContext: Context) {
-        signOut(activityContext)
-
-        CoroutineScope(Dispatchers.Main).launch {
-            credentialManager.clearCredentialState(ClearCredentialStateRequest())
-        }
-
-        val logoutUrl = "https://accounts.google.com/logout"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(logoutUrl))
-        activityContext.startActivity(intent)
     }
 }
