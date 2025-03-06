@@ -11,6 +11,8 @@ class Film {
     var comments: String? = null
     var selected: Boolean = false
     var imgUrl: String? = null
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
 
     override fun toString(): String {
         return title?:"<Sin titulo>"

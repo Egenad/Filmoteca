@@ -16,7 +16,6 @@ object FilmDataSource {
         val resources = appContext.resources
 
         // FILMS
-
         var f = Film()
         f.title = resources.getString(R.string.film_rf_name)
         f.director = resources.getString(R.string.film_rf_director)
@@ -26,6 +25,8 @@ object FilmDataSource {
         f.genre = Film.GENRE_SCIFI
         f.imdbUrl = "http://www.imdb.com/title/tt0088763"
         f.year = 1985
+        f.latitude = 34.10622
+        f.longitude = -118.14128
         films.add(f)
 
         f = Film()
@@ -37,6 +38,8 @@ object FilmDataSource {
         f.genre = Film.GENRE_FANTASY
         f.imdbUrl = "https://www.imdb.com/title/tt0241527"
         f.year = 2001
+        f.latitude = 55.41569
+        f.longitude = -1.70583
         films.add(f)
 
         f = Film()
@@ -48,6 +51,8 @@ object FilmDataSource {
         f.genre = Film.GENRE_FANTASY
         f.imdbUrl = "http://www.imdb.com/title/tt0295297"
         f.year = 2002
+        f.latitude = 54.77338
+        f.longitude = -1.57640
         films.add(f)
 
         f = Film()
@@ -59,6 +64,8 @@ object FilmDataSource {
         f.genre = Film.GENRE_ACTION
         f.imdbUrl = "https://www.imdb.com/title/tt0082971"
         f.year = 1981
+        f.latitude = 21.94746
+        f.longitude = -159.3834
         films.add(f)
 
     }
@@ -80,6 +87,8 @@ object FilmDataSource {
         f.genre = Film.GENRE_SCIFI
         f.imdbUrl = resources.getString(R.string.film_default_imdb)
         f.year = 2000
+        f.latitude = 0.0
+        f.longitude = 0.0
         return f
     }
 
@@ -148,6 +157,8 @@ object FilmDataSource {
             if(movieData.year != null) film.year = Integer.valueOf(movieData.year ?: "0")
             if(movieData.genre != null) film.genre = Integer.valueOf(movieData.genre ?: "0")
             if(movieData.format != null) film.format = Integer.valueOf(movieData.format ?: "0")
+            if(movieData.latitude != null) film.latitude = (movieData.latitude ?: "0").toDouble()
+            if(movieData.longitude != null) film.longitude = (movieData.longitude ?: "0").toDouble()
 
         }else{ // Add to data source
             try {
@@ -161,6 +172,8 @@ object FilmDataSource {
                 f.genre = Integer.valueOf(movieData.genre ?: "0")
                 f.imdbUrl = movieData.imdbUrl
                 f.year = Integer.valueOf(movieData.year ?: "0")
+                f.latitude = (movieData.latitude ?: "0").toDouble()
+                f.longitude = (movieData.longitude ?: "0").toDouble()
                 films.add(f)
             }catch (ex: Exception){
                 ex.printStackTrace()

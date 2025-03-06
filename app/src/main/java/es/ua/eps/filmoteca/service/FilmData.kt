@@ -8,5 +8,7 @@ data class FilmData (
     var format: String? = null,
     var imageUrl: String? = null,
     var imdbUrl: String? = null,
-    var comments: String? = null
+    var comments: String? = null,
+    var latitude: String? = null,
+    var longitude: String? = null
 )

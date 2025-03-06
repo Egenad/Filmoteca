@@ -16,7 +16,6 @@ import com.google.firebase.messaging.RemoteMessage
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.activity.PREFERENCES_NAME
-import org.json.JSONObject
 
 const val TOKEN_FCM = "token_fcm"
 const val BROAD_CAST_FILM = "DATASOURCE_MODIFIED"
@@ -77,7 +76,9 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                         format = remoteMessage.data["movie_format"],
                         imageUrl = remoteMessage.data["movie_imageUrl"],
                         imdbUrl = remoteMessage.data["movie_imdbUrl"],
-                        comments = remoteMessage.data["movie_comments"]
+                        comments = remoteMessage.data["movie_comments"],
+                        latitude = remoteMessage.data["movie_latitude"],
+                        longitude = remoteMessage.data["movie_longitude"],
                     )
 
                     when (type) {

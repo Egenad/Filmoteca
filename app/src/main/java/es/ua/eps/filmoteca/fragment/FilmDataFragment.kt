@@ -19,9 +19,16 @@ import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.activity.FilmEditActivity
+import es.ua.eps.filmoteca.activity.LoginActivity
+import es.ua.eps.filmoteca.activity.MapsActivity
 import es.ua.eps.filmoteca.databinding.ActivityFilmDataBinding
 
-const val EXTRA_FILM_POSITION = "EXTRA_FILM_POSITION"
+const val EXTRA_FILM_POSITION   = "EXTRA_FILM_POSITION"
+const val EXTRA_FILM_LATITUDE   = "EXTRA_FILM_LATITUDE"
+const val EXTRA_FILM_LONGITUDE  = "EXTRA_FILM_LONGITUDE"
+const val EXTRA_FILM_TITLE      = "EXTRA_FILM_TITLE"
+const val EXTRA_FILM_DIRECTOR   = "EXTRA_FILM_DIRECTOR"
+const val EXTRA_FILM_YEAR       = "EXTRA_FILM_YEAR"
 
 class FilmDataFragment : Fragment() {
 
@@ -82,7 +89,6 @@ class FilmDataFragment : Fragment() {
             ) ?: 0)
 
         updateInterfaceByPositionId(selectedFilmPosition)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -108,8 +114,22 @@ class FilmDataFragment : Fragment() {
     fun updateInterfaceByPositionId(position: Int?){
 
         if(FilmDataSource.films.size > (position ?: 0)) {
-            updateInterface(FilmDataSource.films[position ?: 0])
+
+            val selectedFilm = FilmDataSource.films[position ?: 0]
+
+            updateInterface(selectedFilm)
             selectedFilmPosition = position
+
+            binding.showMap?.setOnClickListener{
+                val intent = Intent(activity, MapsActivity::class.java)
+                    .putExtra(EXTRA_FILM_LATITUDE, selectedFilm.latitude)
+                    .putExtra(EXTRA_FILM_LONGITUDE, selectedFilm.longitude)
+                    .putExtra(EXTRA_FILM_TITLE, selectedFilm.title)
+                    .putExtra(EXTRA_FILM_DIRECTOR, selectedFilm.director)
+                    .putExtra(EXTRA_FILM_YEAR, selectedFilm.year)
+
+                startActivity(intent)
+            }
         }
     }
 
@@ -120,6 +140,8 @@ class FilmDataFragment : Fragment() {
         binding.filmData.text = selectedFilm.title?: nullValue
         binding.filmDirectorValue.text = selectedFilm.director?: nullValue
         binding.filmYearValue.text = selectedFilm.year.toString()
+        binding.latitude?.text = getString(R.string.latitude, selectedFilm.latitude)
+        binding.longitude?.text = getString(R.string.longitude, selectedFilm.longitude)
 
         if(selectedFilm.imgUrl != null){
             binding.imageView.load(selectedFilm.imgUrl)

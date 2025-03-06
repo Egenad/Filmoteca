@@ -112,4 +112,29 @@
         android:layout_below="@+id/extended_version"
         android:layout_toEndOf="@+id/centerPoint" />
 
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/film_return"
+        android:text="@string/latitude" />
+
+    <TextView
+        android:id="@+id/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/latitude"
+        android:text="@string/longitude" />
+
+    <Button
+        android:id="@+id/show_map"
+        android:text="@string/show_map"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/longitude" />
+
 </RelativeLayout>

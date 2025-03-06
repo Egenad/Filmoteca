@@ -1,7 +1,11 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -16,6 +20,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(FileInputStream(rootProject.file("local.properties")))
+        }
+
+        manifestPlaceholders["mapsApiKey"] = properties.getProperty("MAPS_API_KEY", "")
     }
 
     buildTypes {
@@ -38,6 +49,9 @@ android {
     viewBinding {
         enable = true
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -57,6 +71,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging")
     implementation("io.coil-kt:coil:2.6.0")
+
+    implementation("com.google.android.gms:play-services-maps:19.1.0")
 
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")

@@ -38,6 +38,9 @@
     <string name="film_h1_name">Harry Potter and the Philosopher´s Stone</string>
     <string name="film_h2_name">Harry Potter and the Chamber of Secrets</string>
     <string name="film_ij_name">Indiana Jones: Raiders of the Lost Ark</string>
+    <string name="latitude"><i>Latitude: %f</i></string>
+    <string name="longitude"><i>Longitude: %f</i></string>
+    <string name="show_map"><b>SHOW IN MAP</b></string>
 
     <!-- FILM EDIT -->
     <string name="film_photo">TAKE SCREENSHOT</string>

@@ -30,6 +30,7 @@
     <string name="film_imdb"><b>VER EN IMDB</b></string>
     <string name="film_edit"><b>EDITAR PELICULA</b></string>
     <string name="film_return"><b>VOLVER AL PRINCIPAL</b></string>
+    <string name="show_map"><b>MOSTRAR EN MAPA</b></string>
     <string name="film_rf_name">Regreso al futuro</string>
     <string name="film_rf_director" translatable="false">Robert Zemeckis</string>
     <string name="film_h1_name">Harry Potter: La Piedra Filosofal</string>
@@ -42,6 +43,8 @@
     <string name="extended_version">Versión extendida</string>
     <string name="film_year_value" translatable="false">1985</string>
     <string name="film_director_header" translatable="false"><i>Director:</i></string>
+    <string name="latitude"><i>Latitud: %f</i></string>
+    <string name="longitude"><i>Longitud: %f</i></string>
     <string name="film_genre_0">Acción</string>
     <string name="film_genre_1">Comedia</string>
     <string name="film_genre_2" translatable="false">Drama</string>
@@ -77,5 +80,6 @@
     <string name="permissions_ask">Esta aplicación necesita el permiso de notificaciones para avisarte sobre eventos importantes. ¿Quieres concederlo?</string>
     <string name="accept">Aceptar</string>
     <string name="no_thanks">No, gracias</string>
+    <string name="title_activity_maps">MapsActivity</string>
 
 </resources>
