@@ -2,6 +2,7 @@ package es.ua.eps.filmoteca.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,7 +15,6 @@ import es.ua.eps.filmoteca.databinding.ActivityMapsBinding
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_DIRECTOR
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_LATITUDE
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_LONGITUDE
-import es.ua.eps.filmoteca.fragment.EXTRA_FILM_POSITION
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_TITLE
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_YEAR
 
@@ -28,6 +28,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setSupportActionBar(binding.includeAppbar.toolbar)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -44,15 +48,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val year        = intent.getIntExtra(EXTRA_FILM_YEAR, 0)
 
         val place = LatLng(latitude, longitude)
-        mMap.addMarker(MarkerOptions()
+        val marker = mMap.addMarker(MarkerOptions()
             .position(place)
             .title(title)
             .snippet("$director, $year")
         )
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place, 13f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(place, 16f))
         mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+        marker?.showInfoWindow()
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
 
+        when(item.itemId){
+            android.R.id.home -> finish()
+        }
+
+        return false
     }
 }
