@@ -143,6 +143,14 @@ class FilmDataFragment : Fragment() {
         binding.latitude?.text = getString(R.string.latitude, selectedFilm.latitude)
         binding.longitude?.text = getString(R.string.longitude, selectedFilm.longitude)
 
+        var geoEnabledString = resources.getString(R.string.enabled)
+
+        if(!selectedFilm.geoEnabled){
+            geoEnabledString = resources.getString(R.string.disabled)
+        }
+
+        binding.geoEnabled?.text = getString(R.string.geoEnabled, geoEnabledString)
+
         if(selectedFilm.imgUrl != null){
             binding.imageView.load(selectedFilm.imgUrl)
         }else{

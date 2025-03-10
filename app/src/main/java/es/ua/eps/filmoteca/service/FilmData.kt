@@ -10,5 +10,6 @@ data class FilmData (
     var imdbUrl: String? = null,
     var comments: String? = null,
     var latitude: String? = null,
-    var longitude: String? = null
+    var longitude: String? = null,
+    var geoEnabled: String? = null
 )

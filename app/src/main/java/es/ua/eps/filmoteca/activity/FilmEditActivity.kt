@@ -1,8 +1,12 @@
 package es.ua.eps.filmoteca.activity
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -13,27 +17,43 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import coil.load
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
 import es.ua.eps.filmoteca.Film
 import es.ua.eps.filmoteca.FilmDataSource
+import es.ua.eps.filmoteca.GeofenceBroadcastReceiver
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_POSITION
 
-
 class FilmEditActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityFilmEditBinding
+    private lateinit var geofencingClient: GeofencingClient
 
     val REQUEST_IMAGE_CAPTURE   = 1
     val REQUEST_MEDIA_FILE      = 2
     var ACTUAL_REQUEST_CODE     = 0
+
+    private val REQUEST_CODE_FOREGROUND = 1001
+    private val REQUEST_CODE_BACKGROUND = 1002
+
+    private var selectedFilm: Film? = null
 
     private val startForResult =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) {result: ActivityResult ->
             onActivityResult(ACTUAL_REQUEST_CODE, result.resultCode, result.data)
         }
+
+    private val geofencePendingIntent: PendingIntent by lazy {
+        val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
+        PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,26 +67,36 @@ class FilmEditActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        geofencingClient = LocationServices.getGeofencingClient(this)
+
+        this.selectedFilm = selectedFilm
+
+        generateBindings()
+    }
+
+    private fun generateBindings(){
         binding.filmSave.setOnClickListener{
 
-            // Retrieve fields data and save them to the selectedFilm
-            selectedFilm.title = binding.filmEditTitle?.text.toString()
-            selectedFilm.director = binding.filmEditDirector?.text.toString()
-            selectedFilm.imdbUrl = binding.filmEditImdb?.text.toString()
-            selectedFilm.comments = binding.filmEditComments?.text.toString()
+            if(selectedFilm != null) {
+                // Retrieve fields data and save them to the selectedFilm
+                selectedFilm?.title = binding.filmEditTitle.text.toString()
+                selectedFilm?.director = binding.filmEditDirector.text.toString()
+                selectedFilm?.imdbUrl = binding.filmEditImdb.text.toString()
+                selectedFilm?.comments = binding.filmEditComments.text.toString()
 
-            try {
-                selectedFilm.year = Integer.parseInt(binding.filmEditYear?.text.toString())
-            }catch(ex : NumberFormatException){
-                Log.e(this.javaClass.toString(), ex.stackTraceToString())
+                try {
+                    selectedFilm?.year = Integer.parseInt(binding.filmEditYear.text.toString())
+                } catch (ex: NumberFormatException) {
+                    Log.e(this.javaClass.toString(), ex.stackTraceToString())
+                }
+
+                selectedFilm?.genre = binding.filmEditGenre.selectedItemPosition
+                selectedFilm?.format = binding.filmEditFormat.selectedItemPosition
+
+                // Return OK result and finish activity
+                setResult(Activity.RESULT_OK)
+                finish()
             }
-
-            selectedFilm.genre = binding.filmEditGenre?.selectedItemPosition?: 0
-            selectedFilm.format = binding.filmEditFormat?.selectedItemPosition?: 0
-
-            // Return OK result and finish activity
-            setResult(Activity.RESULT_OK)
-            finish()
         }
 
         binding.filmCancel.setOnClickListener{ returnButton() }
@@ -100,11 +130,18 @@ class FilmEditActivity : AppCompatActivity() {
                     @Suppress("DEPRECATION")
                     startActivityForResult(mediaFileIntent, REQUEST_MEDIA_FILE)
             }
-
-
         }
 
-        updateEditHud(selectedFilm)
+        binding.filmGeoEnable?.setOnClickListener {
+            if(!selectedFilm!!.geoEnabled)
+                addGeofenceForFilm()
+            else
+                removeGeofence()
+
+            updateGeoEnabledButton()
+        }
+
+        updateEditHud()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int,
@@ -125,19 +162,24 @@ class FilmEditActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateEditHud(selectedFilm: Film){
-        if(selectedFilm.imgUrl != null){
-            binding.imageView.load(selectedFilm.imgUrl)
-        }else{
-            binding.imageView.setImageResource(selectedFilm.imageResId)
+    private fun updateEditHud(){
+        if(selectedFilm != null) {
+
+            if (selectedFilm?.imgUrl != null) {
+                binding.imageView.load(selectedFilm?.imgUrl)
+            } else {
+                binding.imageView.setImageResource(selectedFilm?.imageResId ?: R.drawable.back_to_future)
+            }
+            binding.filmEditTitle.setText(selectedFilm?.title ?: "")
+            binding.filmEditDirector.setText(selectedFilm?.director ?: "")
+            binding.filmEditYear.setText(selectedFilm?.year.toString())
+            binding.filmEditImdb.setText(selectedFilm?.imdbUrl ?: "")
+            binding.filmEditComments.setText(selectedFilm?.comments ?: "")
+            binding.filmEditGenre.setSelection(selectedFilm!!.genre)
+            binding.filmEditFormat.setSelection(selectedFilm!!.format)
+
+            updateGeoEnabledButton()
         }
-        binding.filmEditTitle.setText(selectedFilm.title?: "")
-        binding.filmEditDirector.setText(selectedFilm.director?: "")
-        binding.filmEditYear.setText(selectedFilm.year.toString())
-        binding.filmEditImdb.setText(selectedFilm.imdbUrl?: "")
-        binding.filmEditComments.setText(selectedFilm.comments?: "")
-        binding.filmEditGenre.setSelection(selectedFilm.genre)
-        binding.filmEditFormat.setSelection(selectedFilm.format)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -153,5 +195,126 @@ class FilmEditActivity : AppCompatActivity() {
     private fun returnButton(){
         setResult(Activity.RESULT_CANCELED, null)
         finish()
+    }
+
+    private fun updateGeoEnabledButton(){
+        if(selectedFilm!!.geoEnabled)
+            binding.filmGeoEnable?.text = resources.getString(R.string.film_geoDisable)
+        else
+            binding.filmGeoEnable?.text = resources.getString(R.string.film_geoEnable)
+    }
+
+    private fun addGeofenceForFilm() {
+        val geofence = Geofence.Builder()
+            .setRequestId(selectedFilm?.title ?: "")
+            .setCircularRegion(selectedFilm?.latitude ?: 0.0, selectedFilm?.longitude ?: 0.0, 500f)
+            .setExpirationDuration(Geofence.NEVER_EXPIRE)
+            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+            .build()
+
+        val geofencingRequest = GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            .addGeofence(geofence)
+            .build()
+
+        /*val pendingIntent = PendingIntent.getBroadcast(
+            this, 0, Intent(this, GeofenceBroadcastReceiver::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )*/
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermissions()
+            return
+        }
+
+        geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
+            addOnSuccessListener {
+                selectedFilm?.geoEnabled = true
+                updateGeoEnabledButton()
+                //Toast.makeText(this, resources.getString(R.string.activated_geofence), Toast.LENGTH_SHORT).show()
+            }
+            addOnFailureListener { e ->
+                Log.e("GeofenceError", "Error al añadir geocercado: ${e.message}", e)
+                //Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun removeGeofence() {
+        geofencingClient.removeGeofences(listOf(selectedFilm?.title ?: ""))
+            .addOnSuccessListener {
+                selectedFilm?.geoEnabled = false
+                updateGeoEnabledButton()
+                Toast.makeText(this, resources.getString(R.string.removed_geofence), Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, resources.getString(R.string.error_removing_geofence), Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun requestLocationPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                REQUEST_CODE_FOREGROUND
+            )
+        } else {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_CODE_FOREGROUND
+            )
+        }
+    }
+
+    private fun requestBackgroundPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            AlertDialog.Builder(this)
+                .setTitle("Permiso adicional requerido")
+                .setMessage("Para que el geocercado funcione correctamente, la app necesita permiso de ubicación en segundo plano.")
+                .setPositiveButton("Aceptar") { _, _ ->
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), REQUEST_CODE_BACKGROUND)
+                }
+                .setNegativeButton("Cancelar") { _, _ ->
+                    Toast.makeText(this, "El geocercado no funcionará sin este permiso", Toast.LENGTH_LONG).show()
+                }
+                .show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            REQUEST_CODE_FOREGROUND -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("FilmEditActivity", "Permisos concedidos")
+                    requestBackgroundPermission()
+                } else {
+                    Log.e("FilmEditActivity", "Permisos denegados")
+                    Toast.makeText(
+                        this,
+                        "Es necesario otorgar permisos de ubicación",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            REQUEST_CODE_BACKGROUND -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Permiso de ubicación en segundo plano concedido", Toast.LENGTH_LONG).show()
+                    addGeofenceForFilm()
+                } else {
+                    Toast.makeText(this, "El geocercado no funcionará sin este permiso", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 }

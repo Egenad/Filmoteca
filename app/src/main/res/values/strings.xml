@@ -44,6 +44,7 @@
     <string name="film_year_value" translatable="false">1985</string>
     <string name="film_director_header" translatable="false"><i>Director:</i></string>
     <string name="latitude"><i>Latitud: %f</i></string>
+    <string name="geoEnabled"><i>Geocercado: %s</i></string>
     <string name="longitude"><i>Longitud: %f</i></string>
     <string name="film_genre_0">Acción</string>
     <string name="film_genre_1">Comedia</string>
@@ -54,12 +55,22 @@
     <string name="film_format_0" translatable="false">DVD</string>
     <string name="film_format_1" translatable="false">Digital</string>
     <string name="film_format_2" translatable="false">Blue-Ray</string>
+    <string name="enabled"><b>Habilitado</b></string>
+    <string name="disabled"><b>Deshabilitado</b></string>
+    <string name="enter_geofence"><b>Entraste en la zona de la película</b></string>
+    <string name="exit_geofence"><b>Saliste de la zona de la película</b></string>
+    <string name="activated_geofence"><b>Geocercado activado</b></string>
+    <string name="error_geofence"><b>Error activando geocercado</b></string>
+    <string name="removed_geofence"><b>Geofence eliminado</b></string>
+    <string name="error_removing_geofence"><b>Error eliminando geocercado</b></string>
 
     <!-- FILM EDIT -->
     <string name="film_photo">CAPTURA FOTOGRAFIA</string>
     <string name="film_select_image">SELECCIONA IMAGEN</string>
     <string name="film_save">GUARDAR</string>
     <string name="film_cancel">CANCELAR</string>
+    <string name="film_geoEnable">Añadir Geocercado</string>
+    <string name="film_geoDisable">Eliminar Geocercado</string>
     <string name="film_edit_title">Título de la película</string>
     <string name="film_edit_director">Nombre del director</string>
     <string name="film_edit_year">Año</string>
@@ -68,6 +79,7 @@
     <string name="film_default_title">Nombre por defecto</string>
     <string name="film_default_director">Director por defecto</string>
     <string name="film_default_imdb" translatable="false">http://www.imdb.com</string>
+    <string name="error_perm">Error: La aplicación no posee permisos de geolocalización.</string>
 
     <!-- ERRORS -->
 

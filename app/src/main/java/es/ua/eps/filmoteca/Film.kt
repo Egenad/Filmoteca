@@ -13,6 +13,7 @@ class Film {
     var imgUrl: String? = null
     var latitude: Double = 0.0
     var longitude: Double = 0.0
+    var geoEnabled: Boolean = false
 
     override fun toString(): String {
         return title?:"<Sin titulo>"

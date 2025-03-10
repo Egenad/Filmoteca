@@ -40,7 +40,16 @@
     <string name="film_ij_name">Indiana Jones: Raiders of the Lost Ark</string>
     <string name="latitude"><i>Latitude: %f</i></string>
     <string name="longitude"><i>Longitude: %f</i></string>
+    <string name="geoEnabled"><i>Geofence: %s</i></string>
     <string name="show_map"><b>SHOW IN MAP</b></string>
+    <string name="enabled"><b>Enabled</b></string>
+    <string name="disabled"><b>Disabled</b></string>
+    <string name="enter_geofence"><b>You entered the movie area</b></string>
+    <string name="exit_geofence"><b>You left the movie area</b></string>
+    <string name="activated_geofence"><b>Geofence activated</b></string>
+    <string name="removed_geofence"><b>Geofence removed</b></string>
+    <string name="error_geofence"><b>Error activating geofence</b></string>
+    <string name="error_removing_geofence"><b>Error removing geofence</b></string>
 
     <!-- FILM EDIT -->
     <string name="film_photo">TAKE SCREENSHOT</string>
@@ -50,10 +59,13 @@
     <string name="film_edit_title">Title of the film</string>
     <string name="film_edit_director">Director´s name</string>
     <string name="film_edit_year">Year</string>
+    <string name="film_geoEnable">Add Geofence</string>
+    <string name="film_geoDisable">Delete Geofence</string>
     <string name="film_edit_imdb">Link to IMDB</string>
     <string name="film_edit_comments">Comments</string>
     <string name="film_default_title">Default Name</string>
     <string name="film_default_director">Default Director´s Name</string>
+    <string name="error_perm">Error: The application does not have geolocation permissions.</string>
 
     <!-- ERROR -->
 

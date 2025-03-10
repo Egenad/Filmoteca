@@ -113,11 +113,19 @@
         android:layout_toEndOf="@+id/centerPoint" />
 
     <TextView
-        android:id="@+id/latitude"
+        android:id="@+id/geoEnabled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/film_return"
+        android:text="@string/geoEnabled" />
+
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/geoEnabled"
         android:text="@string/latitude" />
 
     <TextView
