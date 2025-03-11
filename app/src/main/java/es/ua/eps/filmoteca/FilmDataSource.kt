@@ -25,8 +25,8 @@ object FilmDataSource {
         f.genre = Film.GENRE_SCIFI
         f.imdbUrl = "http://www.imdb.com/title/tt0088763"
         f.year = 1985
-        f.latitude = 34.10622
-        f.longitude = -118.14128
+        f.latitude = 38.422541
+        f.longitude = -0.447381
         films.add(f)
 
         f = Film()

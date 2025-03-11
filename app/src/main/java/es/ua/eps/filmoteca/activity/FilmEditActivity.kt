@@ -29,6 +29,7 @@ import es.ua.eps.filmoteca.GeofenceBroadcastReceiver
 import es.ua.eps.filmoteca.R
 import es.ua.eps.filmoteca.databinding.ActivityFilmEditBinding
 import es.ua.eps.filmoteca.fragment.EXTRA_FILM_POSITION
+import java.util.concurrent.TimeUnit
 
 class FilmEditActivity : AppCompatActivity() {
 
@@ -42,7 +43,11 @@ class FilmEditActivity : AppCompatActivity() {
     private val REQUEST_CODE_FOREGROUND = 1001
     private val REQUEST_CODE_BACKGROUND = 1002
 
+    private val GEOFENCE_EXPIRATION_IN_MILLISECONDS: Long = TimeUnit.MINUTES.toMillis(1)
+
     private var selectedFilm: Film? = null
+
+    private val geofenceList: MutableList<Geofence> = mutableListOf()
 
     private val startForResult =
         registerForActivityResult(
@@ -198,54 +203,54 @@ class FilmEditActivity : AppCompatActivity() {
     }
 
     private fun updateGeoEnabledButton(){
-        if(selectedFilm!!.geoEnabled)
+        if(selectedFilm!!.geoEnabled) {
+            Toast.makeText(
+                this,
+                resources.getString(R.string.activated_geofence),
+                Toast.LENGTH_SHORT
+            ).show()
             binding.filmGeoEnable?.text = resources.getString(R.string.film_geoDisable)
-        else
+        }
+        else {
             binding.filmGeoEnable?.text = resources.getString(R.string.film_geoEnable)
+        }
     }
 
     private fun addGeofenceForFilm() {
-        val geofence = Geofence.Builder()
+        geofenceList.add(Geofence.Builder()
             .setRequestId(selectedFilm?.title ?: "")
-            .setCircularRegion(selectedFilm?.latitude ?: 0.0, selectedFilm?.longitude ?: 0.0, 500f)
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
+            .setCircularRegion(selectedFilm?.latitude ?: 0.0, selectedFilm?.longitude ?: 0.0, 50f)
+            .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-            .build()
+            .build())
 
         val geofencingRequest = GeofencingRequest.Builder()
             .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            .addGeofence(geofence)
+            .addGeofences(geofenceList)
             .build()
 
-        /*val pendingIntent = PendingIntent.getBroadcast(
-            this, 0, Intent(this, GeofenceBroadcastReceiver::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )*/
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermissions()
             return
         }
 
-        geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
-            addOnSuccessListener {
-                selectedFilm?.geoEnabled = true
-                updateGeoEnabledButton()
-                //Toast.makeText(this, resources.getString(R.string.activated_geofence), Toast.LENGTH_SHORT).show()
-            }
-            addOnFailureListener { e ->
-                Log.e("GeofenceError", "Error al añadir geocercado: ${e.message}", e)
-                //Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+        geofencingClient.removeGeofences(geofencePendingIntent).run {
+            addOnCompleteListener {
+                geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
+                    addOnSuccessListener {
+                        selectedFilm?.geoEnabled = true
+                        updateGeoEnabledButton()
+                    }
+                    addOnFailureListener { e ->
+                        Log.e("GeofenceError", "Error al añadir geocercado: ${e.message}", e)
+                    }
+                }
             }
         }
     }
 
     private fun removeGeofence() {
-        geofencingClient.removeGeofences(listOf(selectedFilm?.title ?: ""))
+        geofencingClient.removeGeofences(geofencePendingIntent)
             .addOnSuccessListener {
                 selectedFilm?.geoEnabled = false
                 updateGeoEnabledButton()

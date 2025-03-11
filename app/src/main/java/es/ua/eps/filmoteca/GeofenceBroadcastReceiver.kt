@@ -17,7 +17,13 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         if (context == null || intent == null) return
 
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
-        if (geofencingEvent!!.hasError()) {
+
+        if (geofencingEvent == null) {
+            Log.e("GeofenceReceiver", "Geofencing Event is null")
+            return
+        }
+
+        if (geofencingEvent.hasError()) {
             Log.e("GeofenceReceiver", "Error en el geofencing event: ${geofencingEvent.errorCode}")
             return
         }
