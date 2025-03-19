@@ -1,41 +1,39 @@
 package es.ua.eps.filmoteca
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.credentials.GetCredentialException
-import android.net.Uri
 import android.os.Build
 import android.util.Base64
 import android.util.Log
-import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
-import androidx.credentials.CredentialManagerCallback
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.ClearCredentialException
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import es.ua.eps.filmoteca.activity.MainActivity
-import es.ua.eps.filmoteca.activity.PREFERENCES_NAME
 import es.ua.eps.filmoteca.persistence.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-const val USER_NAME         = "user_name"
-const val USER_PHOTO_URL    = "user_photo_url"
-const val USER_EMAIL        = "user_email"
-const val USER_ID           = "user_id"
-
 object ClientManager {
 
     private lateinit var appContext: Context
     private lateinit var credentialManager: CredentialManager
+
+    private var interstitialAd: InterstitialAd? = null
 
     fun init(context: Context) {
         appContext = context.applicationContext
@@ -47,6 +45,8 @@ object ClientManager {
     }
 
     fun startGoogleSignInFlow(activityContext: Context) {
+
+        loadInterstitialAd(activityContext)
 
         CoroutineScope(Dispatchers.Main).launch {
 
@@ -114,7 +114,9 @@ object ClientManager {
                             .createFrom(credential.data)
 
                         handleAccount(googleIdTokenCredential)
-                        activityContext.startActivity(Intent(activityContext, MainActivity::class.java))
+
+                        onLoginSuccess(activityContext)
+
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e("Google", "Received an invalid google id token response", e)
                     }
@@ -154,5 +156,45 @@ object ClientManager {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun onLoginSuccess(activityContext: Context) {
+
+        val activity = activityContext as? Activity
+
+        if (interstitialAd != null && activity != null) {
+            interstitialAd?.show(activity)
+            interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    goToMainActivity(activityContext)
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    goToMainActivity(activityContext)
+                }
+            }
+        } else {
+            goToMainActivity(activityContext)
+        }
+    }
+
+    private fun loadInterstitialAd(context: Context) {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(context, "ca-app-pub-3940256099942544/1033173712", adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                    Log.d("Ads", "Anuncio cargado correctamente")
+                }
+
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    interstitialAd = null
+                    Log.d("Ads", "Error al cargar anuncio: ${adError.message}")
+                }
+            })
+    }
+
+    private fun goToMainActivity(activityContext: Context){
+        activityContext.startActivity(Intent(activityContext, MainActivity::class.java))
     }
 }
